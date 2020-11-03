@@ -4,17 +4,14 @@
 
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.set({color: '#3aa757'}, function() {
-    console.log('The color is green.');
-  });
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
-  f=function(){
-    console.log(window.getSelection().toString());
- }
- document.body.addEventListener('dblclick',f);
+chrome.tabs.onActivated.addListener(tab => {
+  chrome.tabs.get(tab.tabId, current_tab_info => {
+    if(/^https?:\/\//.test(current_tab_info.url)){
+      chrome.tabs.executeScript(null, {file: './foreground.js'}, () => console.log("injected"))
+    }
+  })
+});
+
+chrome.commands.onCommand.addListener(function(command) {
+  console.log('Command:', command);
 });

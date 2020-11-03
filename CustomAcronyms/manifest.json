@@ -1,8 +1,8 @@
 {
   "name": "Acronym Lookup",
   "version": "1.0",
-  "description": "Custom Acronym Lookup",
-  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "description": "Lookup custom acronyms from chrome",
+  "permissions": ["activeTab","tabs", "declarativeContent", "storage", "<all_urls>"],
   "options_page": "options.html",
   "background": {
     "scripts": ["background.js"],
@@ -30,6 +30,13 @@
         "mac": "MacCtrl+Shift+F"
       },
       "description": "Opens search.html"
+    },
+    "_execute_popup_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Opens popup menu"
     }
   },
   "manifest_version": 2
