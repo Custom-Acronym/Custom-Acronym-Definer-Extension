@@ -12,6 +12,13 @@ getCoordinate = (page, offset, windowSize) => {
 }
 
 
+addClicked = (event) => {
+    chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+        console.log(response.farewell);
+      });
+    console.log('eventClicked')
+}
+
 getHighlightedText = (event) => {
     let acronym = window.getSelection().toString()
     let boxWidth = 300
@@ -34,15 +41,19 @@ getHighlightedText = (event) => {
         '</div><div id="gdx-bubble-options-tip" class="display-none">' +
         'Tip: Didnt want this definition pop-up? Try setting a trigger key in <a href="#">Extension Options</a>.' +
         '</div><div id="gdx-bubble-attribution" class="display-none">' +
-        '<a target="_blank"></a><div></div></div><div id="gdx-bubble-more" class="">' +
-        '<a target="_blank" href="https://www.google.com/search?dictcorpus=en-US&amp;hl=en&amp;forcedict=tracker&amp;q=define' + acronym +
-        '">More »</a></div></div>'
+        '<a target="_blank"></a><div></div></div>'+
+        '<button id="gdx-bubble-more" class="">More »</button></div>'
     // html += '<div><div id="gdx-arrow-main" style="top: 1605px; left: 638.992px;">'+
     // '<div id="gdx-bubble-arrow-inner-down"></div><div id="gdx-bubble-arrow-outer-down"></div></div></div>'   
     shadow.innerHTML = html
     document.body.appendChild(div)
 
-
+    //Bind the click event to the more button
+    var shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+    var button = shadowDOM.querySelector("button");
+    if (button){
+        button.addEventListener('click', addClicked);
+    }
 }
 
 closeDialog = (event) => {
@@ -50,7 +61,10 @@ closeDialog = (event) => {
     if (bubble) {
         bubble.remove()
     }
+    event.stopPropagation();
 }
 
 document.body.addEventListener('dblclick', getHighlightedText);
+
 document.body.addEventListener('click', closeDialog);
+
