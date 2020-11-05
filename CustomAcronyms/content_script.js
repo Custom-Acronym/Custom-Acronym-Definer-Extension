@@ -1,41 +1,32 @@
-appendHTML = (el, str, className) => {
-    var div = document.createElement('div')
-    div.className = className
-    div.innerHTML=str;
-    while (div.children.length > 0) {
-        el.appendChild(div.children[0]);
-      }
-}
+var Style = '<style> #gdx-bubble-main,#gdx-arrow-container{background-color:#ffd;z-index:99997}*{box-sizing:border-box}a{color:#11c;text-decoration:none}a:hover{text-decoration:underline}.display-none{display:none!important}#gdx-bubble-main{border:1px solid #999;border-radius:4px;box-shadow:0 0 20px rgba(0,0,0,0.5);color:#222;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:normal;padding:9px;position:absolute;width:300px}#gdx-bubble-main:after{clear:both;content:"";display:table}#gdx-bubble-close{position:absolute;top:0;right:0;width:16px;height:16px;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAYUlEQVQYV12PwQ2AMAwD2w3YBEaAycsIsAkbgC+qowikeyCfHLe31l5xiUM8gm8RQ2x9hmuRECIUNwL2KSwhRCh2BFda4j9CTlbBtQi5ySfy5mzMTXWka3FyEwLPzJv/TR8o8xvGTnBWXwAAAABJRU5ErkJggg==);background-position:center;background-repeat:no-repeat;cursor:pointer;opacity:0.35}#gdx-bubble-close:hover{opacity:0.8}#gdx-bubble-query-row{margin-bottom:9px}#gdx-bubble-query,#gdx-bubble-audio-icon{display:inline-block;height:20px;vertical-align:top}#gdx-bubble-query{font-size:16px;font-weight:bold}#gdx-bubble-audio-icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAcUlEQVQ4y2P4//8/AyUYQhAH3gNxA7IAIQPmo/H3g/QA8XkgFiBkwHyoYnRQABVfj88AmGZcTuuHyjlgMwBZM7IE3NlQGhQe65EN+I8Dw8MLGgYoFpFqADK/YUAMwOsFigORatFIlYRElaRMWmaiBAMAp0n+3U0kqkAAAAAASUVORK5CYII=);background-position:center;background-repeat:no-repeat;cursor:pointer;margin-left:8px;opacity:0.5;width:16px}#gdx-bubble-audio-icon:hover{opacity:1}#gdx-bubble-meaning{line-height:1.3}#gdx-bubble-options-tip,#gdx-bubble-more,#gdx-bubble-attribution{font-size:12px;line-height:1.3;margin-top:9px}#gdx-bubble-options-tip{color:#c04}#gdx-bubble-more a{float:right;word-break:break-all}#gdx-bubble-attribution{color:#666;float:left;margin-right:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:230px}#gdx-bubble-attribution a{color:#073}#gdx-arrow-main{position:absolute;z-index:99998}#gdx-bubble-arrow-inner-up,#gdx-bubble-arrow-inner-down{background:transparent;border-left:10px solid transparent;border-right:10px solid transparent;left:2px;position:absolute;width:0;z-index:99999}#gdx-bubble-arrow-inner-up{border-bottom:10px solid #ffd;top:2px}#gdx-bubble-arrow-inner-down{border-top:10px solid #ffd}#gdx-bubble-arrow-outer-up,#gdx-bubble-arrow-outer-down{background:transparent;border-left:12px solid transparent;border-right:12px solid transparent;left:0px;position:absolute;width:0}#gdx-bubble-arrow-outer-up{border-bottom:12px solid #999}#gdx-bubble-arrow-outer-down{border-top:12px solid #999}.nytd_selection_button{display:none} </style>'
 
-getHighlightedText = () => {
+
+getHighlightedText = (event) => {
     let acronym = window.getSelection().toString()
     console.log(acronym);
+    console.log(event)
+    let definition = "Replace with get request"
 
-
-    var style = document.createElement('style');
-    style.innerHTML =
-    '.popupBubble{' +
-        'position:relative;' +
-        'display:inline;' +
-    '} '+
-    '.popup{' +
-        'position:absolute;' +
-        'display:block;' +
-        'border:1px solid #AAA;' +
-        'background:#FFF;' +
-        'padding:5px;' +
-        'width:300px;' +
-    '};'
-    var ref = document.querySelector('script');
-
-    // Insert our new styles before the first script tag
-    ref.parentNode.insertBefore(style, ref);
+    var div = document.createElement('div')
     
-    // var popup = document.getElementById("myPopup");
-    html = '<div class="popup" id="myPopup">' + acronym + '</div>'
-    className = "popupBubble";
-    appendHTML(document.body, html, className)
-    var popup = document.getElementById('myPopup')
-        
-    }
+    div.setAttribute('id', 'gdx-bubble-host')
+    let shadow = div.attachShadow({mode: 'open'})
+    let html = Style
+    html += '<div id="gdx-bubble-main" style="left:'+ (event.pageX - 60) + 'px; top: ' + (event.pageY - 110) + 'px;">' +
+    '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
+    '<div id="gdx-bubble-query">' + acronym +
+    '</div></div><div id="gdx-bubble-meaning">' + definition + 
+    '</div><div id="gdx-bubble-options-tip" class="display-none">' + 
+    'Tip: Didnt want this definition pop-up? Try setting a trigger key in <a href="#">Extension Options</a>.' +
+    '</div><div id="gdx-bubble-attribution" class="display-none">' + 
+    '<a target="_blank"></a><div></div></div><div id="gdx-bubble-more" class="">' + 
+    '<a target="_blank" href="https://www.google.com/search?dictcorpus=en-US&amp;hl=en&amp;forcedict=tracker&amp;q=define' + acronym +
+    '">More »</a></div></div>'
+    // html += '<div><div id="gdx-arrow-main" style="top: 1605px; left: 638.992px;">'+
+    // '<div id="gdx-bubble-arrow-inner-down"></div><div id="gdx-bubble-arrow-outer-down"></div></div></div>'   
+    shadow.innerHTML = html
+    document.body.appendChild(div)
+
+
+}
 document.body.addEventListener('dblclick', getHighlightedText);
