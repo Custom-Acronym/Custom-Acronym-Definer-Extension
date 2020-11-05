@@ -4,13 +4,13 @@
 
 'use strict';
 
-chrome.tabs.onActivated.addListener(tab => {
-  chrome.tabs.get(tab.tabId, current_tab_info => {
-    if(/^https?:\/\//.test(current_tab_info.url)){
-      chrome.tabs.executeScript(null, {file: './foreground.js'}, () => console.log("injected"))
-    }
-  })
-});
+// chrome.tabs.onActivated.addListener(tab => {
+//   chrome.tabs.get(tab.tabId, current_tab_info => {
+//     if(/^https?:\/\//.test(current_tab_info.url)){
+//       chrome.tabs.executeScript(null, {file: './content_script.js'}, () => console.log(tab))
+//     }
+//   })
+// });
 
 chrome.commands.onCommand.addListener(function(command) {
   console.log('Command:', command);
