@@ -18,6 +18,10 @@ chrome.commands.onCommand.addListener(function(command) {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    chrome.windows.create({
+      url: chrome.runtime.getURL('addAcronym.html'),
+      type: 'popup'
+    })
     console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
