@@ -4,27 +4,16 @@
 
 'use strict';
 
-// chrome.tabs.onActivated.addListener(tab => {
-//   chrome.tabs.get(tab.tabId, current_tab_info => {
-//     if(/^https?:\/\//.test(current_tab_info.url)){
-//       chrome.tabs.executeScript(null, {file: './content_script.js'}, () => console.log(tab))
-//     }
-//   })
-// });
-
+// Listen for key combinations, TODO: Handle these
 chrome.commands.onCommand.addListener(function(command) {
   console.log('Command:', command);
 });
 
+// Listen for a message from the 'More' button
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     chrome.windows.create({
       url: chrome.runtime.getURL('addAcronym.html'),
       type: 'popup'
     })
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
-    if (request.greeting == "hello")
-      sendResponse({farewell: "goodbye"});
   });
