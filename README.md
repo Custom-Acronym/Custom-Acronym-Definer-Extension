@@ -4,6 +4,8 @@ Chrome extension that will define an acronym based on a custom uploaded dictiona
 
 This extension is only compatible with Chrome
 
+https://github.com/Custom-Acronym/Custom-Acronym-Definer-Extension/tree/main
+
 ## Setup
 
 - First open up the Chrome browser and navigate to the extensions in the settings.
