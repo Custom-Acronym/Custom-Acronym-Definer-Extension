@@ -10,7 +10,7 @@ This extension is only compatible with Chrome
 
 - Then select 'Load unpacked' from the buttons in the top left.
 
-![](2020-11-05-21-06-52.png)
+![](Images/2020-11-05-21-06-52.png)
 
 - Navigate to the folder where the extension is located.
 
