@@ -1,21 +1,50 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <script src='addAcronym.js'></script>
-    </head>
-      <body>
-        <form id="getAcronym">
-            <label for="acronym">Acronym:</label>
-            <input id="acronym" name="acronym" value="">
-            <input type="submit" value="GET ACRONYM">
-          </form>
-        <h1>Add New Acronym</h1>
-        <form id="addAcronym">
-            <label for="acronym">Acronym:</label>
-            <input id="acronym" name="acronym" value="">
-            <label for="definition">Definition:</label>
-            <input id="definition" name="definition" value="">
-            <input type="submit" value="ADD ACRONYM">
-          </form>
-        </body>
+    <script src="addAcronym.js"></script>
+    <link href="thirdparty/bootstrap.min.css" rel="stylesheet" />
+    <link href="thirdparty/custom.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="col-xs-4 col-xs-offset-4">
+      <h1>Search Acronym</h1>
+      <form id="getAcronym">
+        <div class="form-group">
+          <label for="acronym">Acronym:</label>
+          <input
+            id="acronym"
+            class="form-control"
+            name="acronym"
+            placeholder=""
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">GET ACRONYM</button>
+      </form>
+
+      <h1>Add New Acronym</h1>
+      <form id="addAcronym">
+        <div class="form-group">
+          <label for="acronym">Acronym:</label>
+          <input
+            id="acronym"
+            class="form-control"
+            name="acronym"
+            placeholder=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="definition">Definition:</label>
+          <input
+            id="definition"
+            class="form-control"
+            name="definition"
+            placeholder=""
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">ADD ACRONYM</button>
+      </form>
+
+      <script src="thirdparty/bootstrap.min.js"></script>
+    </div>
+  </body>
 </html>
