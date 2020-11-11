@@ -6,22 +6,24 @@
     <script src="thirdparty/bootstrap.min.js"></script>
     <link href="thirdparty/bootstrap.min.css" rel="stylesheet" />
     <title>Settings</title>
-
   </head>
   <body>
     <div class="col-xs-4 col-xs-offset-4">
-    <h1>Settings Page</h1>
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Dropdown button
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
+      <h1>Settings</h1>
+      <form>
+        <div class="form-group">
+          <label for="sel1">Activation Key:</label>
+          <select class="form-control" id="sel1">
+            <option>Double Click</option>
+            <option>Ctrl + Click</option>
+            <option>Shift + Click</option>
+            <option>Ctrl + Shift + Click</option>
+          </select>
+          <br>
+        </div>
+      </form>
+      
     </div>
-  </div>
 
     <script src="options.js"></script>
   </body>
