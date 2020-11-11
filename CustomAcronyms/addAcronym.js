@@ -6,18 +6,18 @@ window.addEventListener("load", function () {
   */
   function buildUpdateTextArea(definition, id) {
     let getForm = document.getElementById('getAcronym');
-    let updateForm = document.createElement('form');
     let div = document.createElement('div');
     let textarea = document.createElement('textarea');
     let updateButton = document.createElement('button');
     let h1 = document.createElement('h1');
+    let linebreak = document.createElement("br");
 
-    updateForm.id = 'updateForm';
-    updateForm.appendChild(div);
-    div.classList = "md-form";
+
+    div.classList = "form-group";
     h1.innerText = "Update Acronym";
     div.appendChild(h1);
     div.appendChild(textarea);
+    div.appendChild(linebreak);
     textarea.classList = 'md-textarea form-control';
     textarea.id = 'updateTextArea';
     textarea.rows = '4';
@@ -25,13 +25,13 @@ window.addEventListener("load", function () {
     updateButton.id = 'updateButton';
     updateButton.innerText = "UPDATE ACRONYM";
     updateButton.classList = "btn btn-primary";
-    updateButton.type = 'submit';
-    updateForm.appendChild(updateButton);
-    updateButton.addEventListener('submit', function (event) {
+    updateButton.addEventListener('click', function (event) {
       event.preventDefault();
+      console.log(document.getElementById("updateTextArea").value)
       updateAcronym(document.getElementById("updateTextArea").value, id);
     });
-    getForm.parentNode.insertBefore(updateForm, getForm.nextSibling);
+    div.appendChild(updateButton);
+    getForm.parentNode.insertBefore(div, getForm.nextSibling);
   }
 
   /* 
@@ -54,6 +54,7 @@ window.addEventListener("load", function () {
     else {
       let updateTextArea = document.getElementById('updateTextArea')
       updateTextArea.innerText = definition;
+      updateTextArea.value = definition;
     }
   }
 

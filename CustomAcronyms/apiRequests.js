@@ -69,13 +69,13 @@ function updateAcronym(definition, id) {
     XHR.open('PUT', PUT_ACRONYM_URL + id);
     XHR.setRequestHeader("Content-Type", "application/json");
     console.log(definition);
-    XHR.send(JSON.stringify({'definition': definition}));
+    XHR.send(JSON.stringify({"definition": definition}));
 }
 
 /*
 * Delete acronym to the database 
 */
-function deleteAcronym(input) {
+function deleteAcronym(id) {
     const XHR = new XMLHttpRequest();
 
     XHR.addEventListener("load", function (event) {
@@ -86,7 +86,6 @@ function deleteAcronym(input) {
         alert('Acronym not found!');
     });
 
-    XHR.open('DELETE', DELETE_ACRONYM_URL);
-    console.log(input.value);
-    XHR.send(input.value);
+    XHR.open('DELETE', DELETE_ACRONYM_URL + id);
+    XHR.send();
 }
