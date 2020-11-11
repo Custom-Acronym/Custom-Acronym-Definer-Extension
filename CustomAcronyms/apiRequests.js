@@ -3,6 +3,9 @@
 * on successful get request handle displaying the acronym.
 */
 function getAcronym(handleDisplay, acronym) {
+    if(!acronym){
+        return;
+    }
 
     const XHR = new XMLHttpRequest();
 
