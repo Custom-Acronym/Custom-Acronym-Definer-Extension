@@ -3,7 +3,7 @@
 * on successful get request handle displaying the acronym.
 */
 function getAcronym(handleDisplay, acronym) {
-    if(!acronym){
+    if (!acronym) {
         return;
     }
 
@@ -44,18 +44,41 @@ function addAcronym(form) {
 /*
 * Update acronym to the database 
 */
-function updateAcronym(input) {
+function updateAcronym(definition, id) {
+    if(!definition){
+        alert("Definition cannot be blank");
+        return;
+    }
     const XHR = new XMLHttpRequest();
 
     XHR.addEventListener("load", function (event) {
-      alert(event.target.responseText);
+        alert(event.target.responseText);
     });
 
     XHR.addEventListener("error", function (event) {
-      alert('Acronym not found!');
+        alert('Acronym not found!');
     });
 
-    XHR.open('PUT', PUT_ACRONYM_URL);
+    XHR.open('PUT', PUT_ACRONYM_URL + id);
+    console.log(definition);
+    XHR.send({'definition': definition});
+}
+
+/*
+* Delete acronym to the database 
+*/
+function deleteAcronym(input) {
+    const XHR = new XMLHttpRequest();
+
+    XHR.addEventListener("load", function (event) {
+        alert(event.target.responseText);
+    });
+
+    XHR.addEventListener("error", function (event) {
+        alert('Acronym not found!');
+    });
+
+    XHR.open('DELETE', DELETE_ACRONYM_URL);
     console.log(input.value);
     XHR.send(input.value);
-  }
+}
