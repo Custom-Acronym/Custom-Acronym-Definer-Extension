@@ -38,15 +38,15 @@ function getCoordinate(page, offset, windowSize) {
 /*
 Handle more button click
 */
-function moreClicked(){
-    chrome.runtime.sendMessage({button: "more"});
+function moreClicked() {
+    chrome.runtime.sendMessage({ button: "more" });
 }
 
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse){
+    function (request, sender, sendResponse) {
         if (!request.definition) {
             return;
-          }
+        }
         definition = request.definition;
         let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
         let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
@@ -57,7 +57,7 @@ chrome.runtime.onMessage.addListener(
 /*
 Respond to a user highlighting text
 */
-function getHighlightedText(event){
+function getHighlightedText(event) {
     let acronym = window.getSelection().toString()
     acronym = acronym.trim();
     console.log(acronym);
@@ -67,14 +67,14 @@ function getHighlightedText(event){
     }
     var definition = "&zwnj;"; // Blank Character so the box renders the same size
 
-    chrome.runtime.sendMessage({acronym: acronym});
-    
+    chrome.runtime.sendMessage({ acronym: acronym });
+
     createPopupBubble(event, boxWidth, acronym, definition);
 
     //Bind the click event to the more button
     var shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     var button = shadowDOM.querySelector("button");
-    if (button){
+    if (button) {
         button.addEventListener('click', moreClicked);
     }
 }

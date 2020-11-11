@@ -23,7 +23,7 @@ function getAcronym(handleDisplay, acronym) {
 * Add acronym to the database 
 */
 function addAcronym(acronym, definition) {
-    if(!acronym || !definition){
+    if (!acronym || !definition) {
         alert("Acronym or definition is blank");
         return;
     }
@@ -52,7 +52,7 @@ function addAcronym(acronym, definition) {
 * Update acronym to the database 
 */
 function updateAcronym(definition, id) {
-    if(!definition){
+    if (!definition) {
         alert("Definition cannot be blank");
         return;
     }
@@ -69,7 +69,7 @@ function updateAcronym(definition, id) {
     XHR.open('PUT', PUT_ACRONYM_URL + id);
     XHR.setRequestHeader("Content-Type", "application/json");
     console.log(definition);
-    XHR.send(JSON.stringify({"definition": definition}));
+    XHR.send(JSON.stringify({ "definition": definition }));
 }
 
 /*
