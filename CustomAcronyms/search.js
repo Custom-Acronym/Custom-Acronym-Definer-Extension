@@ -1,6 +1,8 @@
 
 'use strict';
 
+window.resizeTo(500,500);
+
 const getAcronymForm = document.getElementById("getAcronym");
 
 
@@ -21,7 +23,6 @@ function displayDefintion(event){
   else{
     p.innerText = definition;
   }
-
 
 }
 
