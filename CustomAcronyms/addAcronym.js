@@ -5,12 +5,15 @@ window.addEventListener("load", function () {
   and send an update request
   */
   function buildUpdateTextArea(definition, id) {
-    let form = document.getElementById('getAcronym');
+    let getForm = document.getElementById('getAcronym');
+    let updateForm = document.createElement('form');
     let div = document.createElement('div');
     let textarea = document.createElement('textarea');
     let updateButton = document.createElement('button');
     let h1 = document.createElement('h1');
 
+    updateForm.id = 'updateForm';
+    updateForm.appendChild(div);
     div.classList = "md-form";
     h1.innerText = "Update Acronym";
     div.appendChild(h1);
@@ -22,12 +25,13 @@ window.addEventListener("load", function () {
     updateButton.id = 'updateButton';
     updateButton.innerText = "UPDATE ACRONYM";
     updateButton.classList = "btn btn-primary";
-    div.appendChild(updateButton);
+    updateButton.type = 'submit';
+    updateForm.appendChild(updateButton);
     updateButton.addEventListener('submit', function (event) {
       event.preventDefault();
-      updateAcronym(document.getElementById("updateTextArea"), id);
+      updateAcronym(document.getElementById("updateTextArea").value, id);
     });
-    form.parentNode.insertBefore(div, form.nextSibling);
+    getForm.parentNode.insertBefore(updateForm, getForm.nextSibling);
   }
 
   /* 
@@ -58,7 +62,9 @@ window.addEventListener("load", function () {
 
   addAcronymForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    addAcronym(document.getElementById("addAcronymInput"));
+    let acronym = document.getElementById("addAcronymInput").value;
+    let definition = document.getElementById("definition").value;
+    addAcronym(acronym, definition);
   });
 
   getAcronymForm.addEventListener("submit", function (event) {

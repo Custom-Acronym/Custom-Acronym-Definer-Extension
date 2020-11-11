@@ -22,11 +22,17 @@ function getAcronym(handleDisplay, acronym) {
 /*
 * Add acronym to the database 
 */
-function addAcronym(form) {
-    console.log("Sending Data!")
+function addAcronym(acronym, definition) {
+    if(!acronym || !definition){
+        alert("Acronym or definition is blank");
+        return;
+    }
     const XHR = new XMLHttpRequest();
 
-    const FD = new FormData(form);
+    let acronymPayload = {
+        'acronym': acronym,
+        'definition': definition
+    }
 
     // Define what happens on successful data submission
     XHR.addEventListener("load", function (event) {
@@ -37,9 +43,10 @@ function addAcronym(form) {
     XHR.addEventListener("error", function (event) {
         alert('Oops! Something went wrong.');
     });
-
-    XHR.open("POST", "https://example.com/cors.php");
-    XHR.send(FD);
+    console.log(acronymPayload);
+    XHR.open("POST", POST_ACRONYM_URL);
+    XHR.setRequestHeader("Content-Type", "application/json");
+    XHR.send(JSON.stringify(acronymPayload));
 }
 /*
 * Update acronym to the database 
@@ -60,8 +67,9 @@ function updateAcronym(definition, id) {
     });
 
     XHR.open('PUT', PUT_ACRONYM_URL + id);
+    XHR.setRequestHeader("Content-Type", "application/json");
     console.log(definition);
-    XHR.send({'definition': definition});
+    XHR.send(JSON.stringify({'definition': definition}));
 }
 
 /*
