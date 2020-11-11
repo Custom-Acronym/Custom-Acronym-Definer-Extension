@@ -10,7 +10,7 @@ window.addEventListener("load", function () {
     let textarea = document.createElement('textarea');
     let updateButton = document.createElement('button');
     let h1 = document.createElement('h1');
-  
+
     div.classList = "md-form";
     h1.innerText = "Update Acronym";
     div.appendChild(h1);
@@ -91,22 +91,8 @@ window.addEventListener("load", function () {
     XHR.send(input.value);
   }
 
-  function getAcronym(input) {
-    const XHR = new XMLHttpRequest();
-
-    XHR.addEventListener("load", handleUpdateAcronym);
-
-    XHR.addEventListener("error", function (event) {
-      alert('Acronym not found!');
-    });
-
-    XHR.open("GET", GET_ACRONYM_URL + input.value);
-    XHR.send()
-  }
-
   const addAcronymForm = document.getElementById("addAcronym");
   const getAcronymForm = document.getElementById("getAcronym");
-
 
   addAcronymForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -115,8 +101,8 @@ window.addEventListener("load", function () {
 
   getAcronymForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    getAcronym(document.getElementById("getAcronymInput"));
+    let input = document.getElementById("getAcronymInput");
+    getAcronym(handleUpdateAcronym, input.value)
   });
 });
-
 

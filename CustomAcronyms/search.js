@@ -4,7 +4,12 @@
 const getAcronymForm = document.getElementById("getAcronym");
 
 
-addAcronymForm.addEventListener("submit", function (event) {
+function displayDefintion(){
+
+}
+
+getAcronymForm.addEventListener("submit", function (event) {
   event.preventDefault();
-  addAcronym(document.getElementById("addAcronymInput"));
+  let input = document.getElementById("getAcronymInput");
+  getAcronym(displayDefintion, input.value)
 });
