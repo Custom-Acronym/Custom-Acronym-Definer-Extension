@@ -13,11 +13,7 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
     html += '<div id="gdx-bubble-main" style="left:' + getCoordinate(event.pageX, boxWidth / 2, document.body.clientWidth - boxWidth) + 'px; top: ' + getCoordinate(event.pageY, 115, document.body.scrollHeight) + 'px;">' +
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
         '<div id="gdx-bubble-query">' + acronym +
-        '</div></div><div id="gdx-bubble-meaning">' + definition +
-        '</div><div id="gdx-bubble-options-tip" class="display-none">' +
-        'Tip: Didnt want this definition pop-up? Try setting a trigger key in <a href="#">Extension Options</a>.' +
-        '</div><div id="gdx-bubble-attribution" class="display-none">' +
-        '<a target="_blank"></a><div></div></div>' +
+        '</div></div><div id="gdx-bubble-meaning">' + definition + '</div>' +
         '<button id="gdx-bubble-more" class="">More »</button></div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
@@ -40,9 +36,8 @@ function getCoordinate(page, offset, windowSize) {
 /*
 Handle more button click
 */
-function moreClicked(event){
-    chrome.runtime.sendMessage({greeting: "hello"});
-    console.log('eventClicked')
+function moreClicked(){
+    chrome.runtime.sendMessage({button: "more"});
 }
 
 /*
