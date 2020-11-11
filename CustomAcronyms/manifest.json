@@ -2,16 +2,32 @@
   "name": "Acronym Lookup",
   "version": "1.0",
   "description": "Lookup custom acronyms from chrome",
-  "permissions": ["activeTab","tabs", "declarativeContent", "storage", "<all_urls>"],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "declarativeContent",
+    "storage",
+    "<all_urls>"
+  ],
   "options_page": "options.html",
   "background": {
-    "scripts": ["thirdparty/jquery-3.5.1.min.js","background.js"],
+    "scripts": [
+      "Constants.js",
+      "thirdparty/jquery-3.5.1.min.js",
+      "apiRequests.js",
+      "background.js"
+    ],
     "persistent": false
   },
-  "content_scripts":[
+  "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["thirdparty/jquery-3.5.1.min.js", "content_script.js"]
+      "js": [
+        "Constants.js",
+        "thirdparty/jquery-3.5.1.min.js",
+        "apiRequests.js",
+        "content_script.js"
+      ]
     }
   ],
   "browser_action": {
@@ -29,6 +45,7 @@
     "48": "images/get_started48.png",
     "128": "images/get_started128.png"
   },
+  "web_accessible_resources": ["apiRequests.js"],
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
