@@ -50,14 +50,18 @@ Please refer to the readme
 
 - The acronym page should have been opened up
 
+![](Images/2020-11-11-20-27-37.png)
+
 - Type in Yahoo and then click "GET ACRONYM"
 
 - Modify the Edit Text box that shows up to say 'Updated' and click 'UPDATE ACRONYM'
 
+![](Images/2020-11-11-20-28-59.png)
+
 - Go back to the page with the acronym and double click on it.
 
 - The definition should show up as 'Updated'
-
+![](Images/2020-11-11-20-29-42.png)
 
 ## Search Box
 - Navigate to the top right where the extensions show up.
@@ -77,3 +81,5 @@ Please refer to the readme
 - Choose Options
 
 - You should be navigated to an Options page
+
+![](Images/2020-11-11-20-02-24.png)
