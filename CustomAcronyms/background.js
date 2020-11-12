@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener(
     }
     else if (request.button) {
       chrome.windows.create({
-        url: chrome.runtime.getURL('addAcronym.html'),
+        url: chrome.runtime.getURL('morePage.html'),
         type: 'popup',
         height: 700,
         width: 470
