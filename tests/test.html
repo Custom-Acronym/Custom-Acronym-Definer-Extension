@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>API Tests</title>
+
+    <link rel="stylesheet" href="qunit.css" />
+    <script src="qunit.js"></script>
+    <script src="../CustomAcronyms/constants.js"></script>
+    <script src="../CustomAcronyms/apiRequests.js"></script>
+
+    <script>
+    QUnit.test("getAcronym", function(assert) {
+        var now = "2008/01/28 22:25:00";
+        getAcronym(function(event){},"UIUC");
+        assert.equal(0,0);
+    });
+    </script>
+</head>
+<body>
+    <div id="qunit"></div>
+</body>
+</html>

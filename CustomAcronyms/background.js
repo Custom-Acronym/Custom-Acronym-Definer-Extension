@@ -34,9 +34,8 @@ chrome.runtime.onMessage.addListener(
       chrome.windows.create({
         url: chrome.runtime.getURL('morePage.html'),
         type: 'popup',
-        height: 700,
+        height: 710,
         width: 470
       })
     }
-
   });
