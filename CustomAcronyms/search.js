@@ -1,26 +1,26 @@
 
 'use strict';
 
-window.resizeTo(500,500);
+window.resizeTo(500, 500);
 
 const getAcronymForm = document.getElementById("getAcronym");
 
 
-function displayDefintion(event){
-  if (event.target.responseText == '[]') {
+function displayDefintion(data) {
+  console.log(data);
+  if (!data) {
     alert("Acronym not found!");
     return;
   }
-  let data = JSON.parse(event.target.responseText);
-  let definition = data[0].definition
+  let definition = data[0].definition;
   let p = document.getElementById('definitionText')
-  if(!p){
+  if (!p) {
     let p = document.createElement('p');
     p.id = "definitionText";
     p.innerText = definition;
     document.body.appendChild(p);
   }
-  else{
+  else {
     p.innerText = definition;
   }
 
@@ -29,5 +29,10 @@ function displayDefintion(event){
 getAcronymForm.addEventListener("submit", function (event) {
   event.preventDefault();
   let input = document.getElementById("getAcronymInput");
-  getAcronym(displayDefintion, input.value)
+  getAcronym(input.value)
+    .then(response => response.json())
+    .then(data => displayDefintion(data))
+    .catch((error) => {
+      alert("Acronym not found");
+    })
 });

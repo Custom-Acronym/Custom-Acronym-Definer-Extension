@@ -8,13 +8,13 @@ chrome.commands.onCommand.addListener(function (command) {
 /*
 Send defition recieved to the popup bubble tab 
 */
-function sendDefition(event, tabid) {
+function sendDefition(data, tabid) {
   let definition = "";
-  if (event.target.responseText == '[]') {
+  if (!data) {
     definition = "Acronym not defined"
   }
   else {
-    definition = JSON.parse(event.target.responseText)[0].definition
+    definition = data[0].definition
   }
   chrome.tabs.sendMessage(tabid, { definition: definition });
 }
@@ -23,12 +23,12 @@ function sendDefition(event, tabid) {
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.acronym) {
-      const XHR = new XMLHttpRequest();
-      XHR.addEventListener("load", function (event) {
-        sendDefition(event, sender.tab.id)
-      });
-      XHR.open("GET", GET_ACRONYM_URL + request.acronym);
-      XHR.send();
+      getAcronym(request.acronym)
+      .then(response => response.json())
+      .then(data => sendDefition(data, sender.tab.id))
+      .catch((error) => {
+        sendDefition(null, sender.tab.id)
+      })
     }
     else if (request.button) {
       chrome.windows.create({
