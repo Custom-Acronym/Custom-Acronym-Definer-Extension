@@ -1,17 +1,28 @@
-window.addEventListener("load", function () {
+// window.addEventListener("load", function () {
 
-  /* 
-  Build Text area to display definition and allow the user edit
-  and send an update request
-  */
+  /**
+   * Handle submission of the text area 
+   */
+  function handleUpdateSubmission(id) {
+    updateAcronym(document.getElementById("updateTextArea").value, id)
+      .then(() => alert("Acronym updated successfully"))
+      .catch(() => {
+        alert("Acronym could not be updated");
+      })
+  }
+
+  /**
+   * Build Text area to display definition and allow the user edit and send an update request,
+   * @param {*} definition - definition of the acronym
+   * @param {*} id - database id
+   */
   function buildUpdateTextArea(definition, id) {
-    let getForm = document.getElementById('getAcronym');
+    let getForm = document.getElementById('getAcronymNewWindow');
     let div = document.createElement('div');
     let textarea = document.createElement('textarea');
     let updateButton = document.createElement('button');
     let h1 = document.createElement('h1');
     let linebreak = document.createElement("br");
-
 
     div.classList = "form-group";
     div.id = "updateArea";
@@ -27,21 +38,16 @@ window.addEventListener("load", function () {
     updateButton.innerText = "UPDATE ACRONYM";
     updateButton.classList = "btn btn-primary";
     updateButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      console.log(document.getElementById("updateTextArea").value)
-      updateAcronym(document.getElementById("updateTextArea").value, id)
-        .then(response => alert("Acronym updated successfully"))
-        .catch((error) => {
-          alert("Acronym could not be updated");
-        })
+      event.preventDefault()
+      handleUpdateSubmission(id);
     });
     div.appendChild(updateButton);
     getForm.parentNode.insertBefore(div, getForm.nextSibling);
   }
 
-  /* 
-  Handle a successful update request 
-  */
+  /**
+   *  Display the Update acronym form area on the page
+   */
   function handleUpdateAcronym(data) {
     console.log(data);
     if (!data) {
@@ -62,31 +68,32 @@ window.addEventListener("load", function () {
   }
 
   const addAcronymForm = document.getElementById("addAcronym");
-  const getAcronymForm = document.getElementById("getAcronym");
+  const getAcronymFormNewWindow = document.getElementById("getAcronymNewWindow");
+
   if (addAcronymForm) {
     addAcronymForm.addEventListener("submit", function (event) {
       event.preventDefault();
       let acronym = document.getElementById("addAcronymInput").value;
       let definition = document.getElementById("definition").value;
       addAcronym(acronym, definition)
-        .then(response => alert("Acronym added successfully"))
-        .catch((error) => {
+        .then(() => alert("Acronym added successfully"))
+        .catch(() => {
           alert("Acronym could not be added");
         })
     });
   }
-  
-  if (getAcronymForm) {
-    getAcronymForm.addEventListener("submit", function (event) {
+
+  if (getAcronymFormNewWindow) {
+    getAcronymFormNewWindow.addEventListener("submit", function (event) {
       event.preventDefault();
       let input = document.getElementById("getAcronymInput");
       getAcronym(input.value)
         .then(response => response.json())
         .then(data => handleUpdateAcronym(data))
-        .catch((error) => {
+        .catch(() => {
           alert("Acronym not found");
         })
     });
   }
-});
+// });
 

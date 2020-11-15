@@ -26,10 +26,10 @@ function addAcronym(acronym, definition) {
         return;
     }
 
-    let acronymPayload = {
+    let acronymPayload = [{
         'acronym': acronym,
         'definition': definition
-    }
+    }]
 
     return fetch(POST_ACRONYM_URL,
         {
