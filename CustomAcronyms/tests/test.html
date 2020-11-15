@@ -30,16 +30,12 @@
 
     <script>
       QUnit.test("Test opening and closing popup", function (assert) {
-        p = document.createElement("p");
-        p.innerText = "UIUC";
-
         var event = new MouseEvent("dblclick", {
           view: window,
           bubbles: true,
           cancelable: true,
         });
-        document.body.appendChild(p);
-        p.dispatchEvent(event);
+        document.body.dispatchEvent(event);
         let bubble = document.getElementById("gdx-bubble-host");
         assert.notEqual(bubble, null);
 
@@ -51,7 +47,28 @@
         document.body.click(); // close bubble
         bubble = document.getElementById("gdx-bubble-host");
         assert.equal(bubble, null);
-        p.remove();
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test acronym query in popup", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.body.dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        // Check that the definition gets set
+        let shadowDOM = bubble.shadowRoot;
+        let query = shadowDOM.querySelector("#gdx-bubble-query");
+        assert.equal(query.innerText, "UIUC");
+
+        document.body.click(); // close bubble
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
       });
     </script>
 
@@ -112,14 +129,13 @@
         const boxHeight = 230;
         const pageWidth = 1920;
         const pageHeight = 1080;
-        let xcoord = getCoordinate(1920+500, boxWidth, pageWidth);
-        let ycoord = getCoordinate(1080+500, boxHeight, pageHeight);
+        let xcoord = getCoordinate(1920 + 500, boxWidth, pageWidth);
+        let ycoord = getCoordinate(1080 + 500, boxHeight, pageHeight);
         assert.true(xcoord >= 5);
         assert.true(ycoord >= 5);
         assert.true(xcoord + boxWidth <= pageWidth);
         assert.true(ycoord + boxHeight <= pageHeight);
       });
-      
     </script>
 
     <script>
@@ -128,6 +144,25 @@
         handleUpdateAcronym(data);
         let updateArea = document.getElementById("updateArea");
         assert.notEqual(updateArea, null);
+        updateArea.remove();
+        updateArea = document.getElementById("updateArea");
+        assert.equal(updateArea, null);
+      });
+    </script>
+    <script>
+      QUnit.test("Test update area contains definition", function (assert) {
+        data = [{ _id: "1", definition: "Test" }];
+        handleUpdateAcronym(data);
+        let updateArea = document.getElementById("updateArea");
+        assert.notEqual(updateArea, null);
+
+        let updateTextArea = document.getElementById("updateTextArea");
+        assert.equal(updateTextArea.value, "Test");
+
+        // Check updating inner text element
+        updateTextArea.innerText = "Test2";
+        assert.equal(updateTextArea.value, "Test2");
+
         updateArea.remove();
         updateArea = document.getElementById("updateArea");
         assert.equal(updateArea, null);
