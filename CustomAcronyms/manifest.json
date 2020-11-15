@@ -2,6 +2,7 @@
   "name": "Acronym Lookup",
   "version": "1.0",
   "description": "Lookup custom acronyms from chrome",
+  "content_security_policy": "script-src 'self' 'sha256-+H/nHisyQ7ctGa57bUV1NuADOJv6YXoG3cGELnVKRWI='",
   "permissions": [
     "activeTab",
     "tabs",

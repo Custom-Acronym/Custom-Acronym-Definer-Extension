@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
+
     <title>API Tests</title>
 
     <link rel="stylesheet" href="qunit.css" />
@@ -11,14 +11,38 @@
     <script src="../apiRequests.js"></script>
 
     <script>
-    QUnit.test("getAcronym", function(assert) {
-        var now = "2008/01/28 22:25:00";
-        getAcronym(function(event){},"UIUC");
+      QUnit.test("Display search definition", function(assert) {
+        displayDefintion([{"definition":"Test"}])
+        p = document.getElementById('definitionText');
+        assert.equal(p.innerText,"Test");
+        document.getElementById('getAcronym').remove();
+        p.remove();
+      });
+
+      QUnit.test("Display search definition", function(assert) {
+        getAcronym("UIUC").then((response) => repsonse.json())
+        .then((data) => assert(data[0].definition, "University of Illinois Urbana Champaign"));
         assert.equal(0,0);
-    });
+      });
     </script>
-</head>
-<body>
+  </head>
+  <body>
+      
     <div id="qunit"></div>
-</body>
+
+    <form id="getAcronym">
+        <div class="form-group">
+          <label for="getAcronymInput">Acronym:</label>
+          <input
+            id="getAcronymInput"
+            class="form-control"
+            name="acronym"
+            placeholder=""
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">GET ACRONYM</button>
+      </form>
+      <script src="../search.js"></script>
+
+  </body>
 </html>

@@ -9,6 +9,7 @@ function getAcronym(acronym) {
     return fetch(GET_ACRONYM_URL + acronym,
         {
             method: "GET",
+            mode: "cors",
             headers: {
                 "Content-Type": "application/json"
             }
@@ -68,6 +69,5 @@ function deleteAcronym(id) {
             headers: {
                 "Content-Type": "application/json"
             }
-            
         });
 }
