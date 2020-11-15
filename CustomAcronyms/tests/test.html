@@ -9,40 +9,110 @@
     <script src="qunit.js"></script>
     <script src="../constants.js"></script>
     <script src="../apiRequests.js"></script>
+    <script src="chrome-api-mock.js"></script>
+    <script>
+      // Mock the chrome instance
+      var chrome = getChromeInstance();
+    </script>
+
+    <script src="../background.js"></script>
+    <script src="../morePage.js"></script>
+
 
     <script>
-      QUnit.test("Display search definition", function(assert) {
-        displayDefintion([{"definition":"Test"}])
-        p = document.getElementById('definitionText');
-        assert.equal(p.innerText,"Test");
-        document.getElementById('getAcronym').remove();
+      QUnit.test("Display search definition", function (assert) {
+        displayDefintion([{ definition: "Test" }]);
+        p = document.getElementById("definitionText");
+        assert.equal(p.innerText, "Test");
+        document.getElementById("getAcronym").remove();
         p.remove();
       });
+    </script>
 
-      QUnit.test("Display search definition", function(assert) {
-        getAcronym("UIUC").then((response) => repsonse.json())
-        .then((data) => assert(data[0].definition, "University of Illinois Urbana Champaign"));
-        assert.equal(0,0);
+    <script>
+      QUnit.test("Test opening and closing popup", function (assert) {
+        p = document.createElement("p");
+        p.innerText = "UIUC";
+
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.body.appendChild(p);
+        p.dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        // Check that the definition gets set
+        let shadowDOM = bubble.shadowRoot;
+        let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
+        assert.equal(meaning.innerText, definition);
+
+        document.body.click(); // close bubble
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+        p.remove();
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test coordinate 0s", function (assert) {
+        let coord = getCoordinate(0, 0, 0);
+        assert.true(coord >= 5);
+      });
+
+      QUnit.test("Test top left of page", function (assert) {
+        const boxWidth = 300;
+        const boxHeight = 230;
+        const pageWidth = 1920;
+        const pageHeight = 1080;
+        let xcoord = getCoordinate(0, boxWidth, pageWidth);
+        let ycoord = getCoordinate(0, boxHeight, pageHeight);
+        assert.true(xcoord >= 5);
+        assert.true(ycoord >= 5);
+        assert.true(xcoord + boxWidth <= pageWidth);
+        assert.true(ycoord + boxHeight <= pageHeight);
+      });
+
+      QUnit.test("Test coordinate bottom right of page", function (assert) {
+        const boxWidth = 300;
+        const boxHeight = 230;
+        const pageWidth = 1920;
+        const pageHeight = 1080;
+        let xcoord = getCoordinate(1920, boxWidth, pageWidth);
+        let ycoord = getCoordinate(1080, boxHeight, pageHeight);
+        assert.true(xcoord >= 5);
+        assert.true(ycoord >= 5);
+        assert.true(xcoord + boxWidth <= pageWidth);
+        assert.true(ycoord + boxHeight <= pageHeight);
       });
     </script>
   </head>
   <body>
-      
     <div id="qunit"></div>
 
     <form id="getAcronym">
-        <div class="form-group">
-          <label for="getAcronymInput">Acronym:</label>
-          <input
-            id="getAcronymInput"
-            class="form-control"
-            name="acronym"
-            placeholder=""
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">GET ACRONYM</button>
-      </form>
-      <script src="../search.js"></script>
-
+      <div class="form-group">
+        <label for="getAcronymInput">Acronym:</label>
+        <input
+          id="getAcronymInput"
+          class="form-control"
+          name="acronym"
+          placeholder=""
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">GET ACRONYM</button>
+    </form>
+    <script src="../search.js"></script>
+    <script src="../content_script.js"></script>
+    <script>
+      // Mock function
+      function getHighlightedText() {
+        return "UIUC";
+      }
+      // Mock definition
+      var definition = "University of Illinois at Urbana-Champaign";
+    </script>
   </body>
 </html>

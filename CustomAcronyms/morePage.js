@@ -30,10 +30,10 @@ window.addEventListener("load", function () {
       event.preventDefault();
       console.log(document.getElementById("updateTextArea").value)
       updateAcronym(document.getElementById("updateTextArea").value, id)
-      .then(response => alert("Acronym updated successfully"))
-      .catch((error) => {
-        alert("Acronym could not be updated");
-      })
+        .then(response => alert("Acronym updated successfully"))
+        .catch((error) => {
+          alert("Acronym could not be updated");
+        })
     });
     div.appendChild(updateButton);
     getForm.parentNode.insertBefore(div, getForm.nextSibling);
@@ -53,7 +53,7 @@ window.addEventListener("load", function () {
 
     // If the element is already present don't build a new one.
     var updateDiv = document.getElementById('updateArea')
-    
+
     if (updateDiv) {
       updateDiv.remove();
     }
@@ -61,31 +61,32 @@ window.addEventListener("load", function () {
 
   }
 
-
-
   const addAcronymForm = document.getElementById("addAcronym");
   const getAcronymForm = document.getElementById("getAcronym");
-
-  addAcronymForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    let acronym = document.getElementById("addAcronymInput").value;
-    let definition = document.getElementById("definition").value;
-    addAcronym(acronym, definition)
-    .then(response => alert("Acronym added successfully"))
-    .catch((error) => {
-      alert("Acronym could not be added");
-    })
-  });
-
-  getAcronymForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    let input = document.getElementById("getAcronymInput");
-    getAcronym(input.value)
-      .then(response => response.json())
-      .then(data => handleUpdateAcronym(data))
-      .catch((error) => {
-        alert("Acronym not found");
-      })
-  });
+  if (addAcronymForm) {
+    addAcronymForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      let acronym = document.getElementById("addAcronymInput").value;
+      let definition = document.getElementById("definition").value;
+      addAcronym(acronym, definition)
+        .then(response => alert("Acronym added successfully"))
+        .catch((error) => {
+          alert("Acronym could not be added");
+        })
+    });
+  }
+  
+  if (getAcronymForm) {
+    getAcronymForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      let input = document.getElementById("getAcronymInput");
+      getAcronym(input.value)
+        .then(response => response.json())
+        .then(data => handleUpdateAcronym(data))
+        .catch((error) => {
+          alert("Acronym not found");
+        })
+    });
+  }
 });
 
