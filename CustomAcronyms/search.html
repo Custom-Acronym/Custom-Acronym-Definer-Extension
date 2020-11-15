@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="Constants.js"></script>
+    <script src="apiRequests.js"></script>
+    <script src="thirdparty/jquery-3.5.1.min.js"></script>
+    <script src="thirdparty/bootstrap.min.js"></script>
+    <link href="thirdparty/bootstrap.min.css" rel="stylesheet" />
   </head>
+
   <body>
-    <textarea id="search" name="search" rows="1" cols="20"></textarea>
-      <input type="submit" value="Submit">
+    <form id="getAcronym">
+      <div class="form-group">
+        <label for="getAcronymInput">Acronym:</label>
+        <input
+          id="getAcronymInput"
+          class="form-control"
+          name="acronym"
+          placeholder=""
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">GET ACRONYM</button>
     </form>
-    
     <script src="search.js"></script>
   </body>
 </html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="thirdparty/jquery-3.5.1.min.js"></script>
+    <script src="Constants.js"></script>
+    <script src="apiRequests.js"></script>
+    <script src="thirdparty/bootstrap.min.js"></script>
+    <link href="thirdparty/bootstrap.min.css" rel="stylesheet" />
+    <title>More</title>
+  </head>
+  <body>
+    <div class="col-xs-10 col-xs-offset-1">
+      <h1>Search Acronym</h1>
+      <form id="getAcronymNewWindow">
+        <div class="form-group">
+          <label for="getAcronymInput">Acronym:</label>
+          <input
+            id="getAcronymInput"
+            class="form-control"
+            name="acronym"
+            placeholder=""
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">GET ACRONYM</button>
+      </form>
+
+      <h1>Add New Acronym</h1>
+      <form id="addAcronym">
+        <div class="form-group">
+          <label for="addAcronymInput">Acronym:</label>
+          <input
+            id="addAcronymInput"
+            class="form-control"
+            name="acronym"
+            placeholder=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="definition">Definition:</label>
+          <input
+            id="definition"
+            class="form-control"
+            name="definition"
+            placeholder=""
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">ADD ACRONYM</button>
+      </form>
+
+      <script src="morePage.js"></script>
+    </div>
+  </body>
+</html>

@@ -17,3 +17,14 @@ https://github.com/Custom-Acronym/Custom-Acronym-Definer-Extension/tree/main
 - Navigate to the folder where the extension is located.
 
 - The extension should now be enabled.
+
+## Testing
+
+Testing uses Qunit
+
+Locally open test.html in the browser. The test results are displayed like the following.
+
+![](Images/2020-11-15-15-57-29.png)
+
+
+Read the ManualTestPlan.md to perform manual tests.

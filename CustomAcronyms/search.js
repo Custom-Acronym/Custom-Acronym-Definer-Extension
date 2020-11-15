@@ -1,14 +1,38 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 'use strict';
 
-function submitSearch(event) {
-  log.textContent = `Form Submitted! Time stamp: ${event.timeStamp}`;
-  console.log(event);
-  event.preventDefault();
-}
-const form = document.getElementById('search')
+window.resizeTo(500, 500);
 
-form.addEventListener('submit', submitSearch)
+const getAcronymForm = document.getElementById("getAcronym");
+
+
+function displayDefintion(data) {
+  console.log(data);
+  if (!data) {
+    alert("Acronym not found!");
+    return;
+  }
+  let definition = data[0].definition;
+  let p = document.getElementById('definitionText')
+  if (!p) {
+    let p = document.createElement('p');
+    p.id = "definitionText";
+    p.innerText = definition;
+    document.body.appendChild(p);
+  }
+  else {
+    p.innerText = definition;
+  }
+
+}
+
+getAcronymForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  let input = document.getElementById("getAcronymInput");
+  getAcronym(input.value)
+    .then(response => response.json())
+    .then(data => displayDefintion(data))
+    .catch((error) => {
+      alert("Acronym not found");
+    })
+});

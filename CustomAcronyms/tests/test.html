@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Acronym Chrome Extension Tests</title>
+
+    <link rel="stylesheet" href="qunit.css" />
+    <script src="qunit.js"></script>
+    <script src="../constants.js"></script>
+    <script src="../apiRequests.js"></script>
+    <script src="chrome-api-mock.js"></script>
+    <script>
+      // Mock the chrome instance
+      var chrome = getChromeInstance();
+    </script>
+
+    <script src="../background.js"></script>
+    <script src="../morePage.js"></script>
+
+    <script>
+      QUnit.test("Test display search definition", function (assert) {
+        displayDefintion([{ definition: "Test" }]);
+        p = document.getElementById("definitionText");
+        assert.equal(p.innerText, "Test");
+        document.getElementById("getAcronym").remove();
+        p.remove();
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and closing popup", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.body.dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        // Check that the definition gets set
+        let shadowDOM = bubble.shadowRoot;
+        let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
+        assert.equal(meaning.innerText, definition);
+
+        document.body.click(); // close bubble
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test acronym query in popup", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.body.dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        // Check that the definition gets set
+        let shadowDOM = bubble.shadowRoot;
+        let query = shadowDOM.querySelector("#gdx-bubble-query");
+        assert.equal(query.innerText, "UIUC");
+
+        document.body.click(); // close bubble
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and clicking more", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.body.dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        let shadowDOM = bubble.shadowRoot;
+        let more = shadowDOM.querySelector("#gdx-bubble-more");
+
+        more.click(); // click more page
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test coordinate 0s", function (assert) {
+        let coord = getCoordinate(0, 0, 0);
+        assert.true(coord >= 5);
+      });
+
+      QUnit.test("Test top left of page", function (assert) {
+        const boxWidth = 300;
+        const boxHeight = 230;
+        const pageWidth = 1920;
+        const pageHeight = 1080;
+        let xcoord = getCoordinate(0, boxWidth, pageWidth);
+        let ycoord = getCoordinate(0, boxHeight, pageHeight);
+        assert.true(xcoord >= 5);
+        assert.true(ycoord >= 5);
+        assert.true(xcoord + boxWidth <= pageWidth);
+        assert.true(ycoord + boxHeight <= pageHeight);
+      });
+
+      QUnit.test("Test coordinate bottom right of page", function (assert) {
+        const boxWidth = 300;
+        const boxHeight = 230;
+        const pageWidth = 1920;
+        const pageHeight = 1080;
+        let xcoord = getCoordinate(1920, boxWidth, pageWidth);
+        let ycoord = getCoordinate(1080, boxHeight, pageHeight);
+        assert.true(xcoord >= 5);
+        assert.true(ycoord >= 5);
+        assert.true(xcoord + boxWidth <= pageWidth);
+        assert.true(ycoord + boxHeight <= pageHeight);
+      });
+
+      QUnit.test("Test coordinate off page", function (assert) {
+        const boxWidth = 300;
+        const boxHeight = 230;
+        const pageWidth = 1920;
+        const pageHeight = 1080;
+        let xcoord = getCoordinate(1920 + 500, boxWidth, pageWidth);
+        let ycoord = getCoordinate(1080 + 500, boxHeight, pageHeight);
+        assert.true(xcoord >= 5);
+        assert.true(ycoord >= 5);
+        assert.true(xcoord + boxWidth <= pageWidth);
+        assert.true(ycoord + boxHeight <= pageHeight);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test update area shows up", function (assert) {
+        data = [{ _id: "1", definition: "Test" }];
+        handleUpdateAcronym(data);
+        let updateArea = document.getElementById("updateArea");
+        assert.notEqual(updateArea, null);
+        updateArea.remove();
+        updateArea = document.getElementById("updateArea");
+        assert.equal(updateArea, null);
+      });
+    </script>
+    <script>
+      QUnit.test("Test update area contains definition", function (assert) {
+        data = [{ _id: "1", definition: "Test" }];
+        handleUpdateAcronym(data);
+        let updateArea = document.getElementById("updateArea");
+        assert.notEqual(updateArea, null);
+
+        let updateTextArea = document.getElementById("updateTextArea");
+        assert.equal(updateTextArea.value, "Test");
+
+        // Check updating inner text element
+        updateTextArea.innerText = "Test2";
+        assert.equal(updateTextArea.value, "Test2");
+
+        updateArea.remove();
+        updateArea = document.getElementById("updateArea");
+        assert.equal(updateArea, null);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="qunit"></div>
+
+    <form id="getAcronym">
+      <div class="form-group">
+        <label for="getAcronymInput">Acronym:</label>
+        <input
+          id="getAcronymInput"
+          class="form-control"
+          name="acronym"
+          placeholder=""
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">GET ACRONYM</button>
+    </form>
+    <form id="getAcronymNewWindow"></form>
+
+    <script src="../search.js"></script>
+    <script src="../content_script.js"></script>
+    <script>
+      // Mock function
+      function getHighlightedText() {
+        return "UIUC";
+      }
+      // Mock definition
+      var definition = "University of Illinois at Urbana-Champaign";
+    </script>
+  </body>
+</html>
