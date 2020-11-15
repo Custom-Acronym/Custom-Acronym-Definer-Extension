@@ -42,6 +42,7 @@ function addAcronym(acronym, definition) {
 }
 /*
 * Update acronym to the database 
+* return promise
 */
 function updateAcronym(definition, id) {
     if (!definition) {
@@ -61,6 +62,7 @@ function updateAcronym(definition, id) {
 
 /*
 * Delete acronym to the database 
+* return promise
 */
 function deleteAcronym(id) {
     return fetch(DELETE_ACRONYM_URL + id,

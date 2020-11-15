@@ -1,13 +1,15 @@
 'use strict';
 
-// Listen for key combinations, TODO: Handle these
+/**
+ * Listen for key combinations, TODO: Handle these
+ *  */ 
 chrome.commands.onCommand.addListener(function (command) {
   console.log('Command:', command);
 });
 
-/*
-Send defition recieved to the popup bubble tab 
-*/
+/**
+ * Send defition recieved to the popup bubble tab 
+ */
 function sendDefition(data, tabid) {
   let definition = "";
   if (!data) {
