@@ -6,7 +6,7 @@ function getAcronym(acronym) {
     if (!acronym) {
         return;
     }
-    return fetch(GET_ACRONYM_URL + acronym,
+    return fetch(ACRONYM_URL + acronym,
         {
             method: "GET",
             mode: "cors",
@@ -31,7 +31,7 @@ function addAcronym(acronym, definition) {
         'definition': definition
     }]
 
-    return fetch(POST_ACRONYM_URL,
+    return fetch(ACRONYM_URL,
         {
             method: "POST",
             headers: {
@@ -50,7 +50,7 @@ function updateAcronym(definition, id) {
         return;
     }
 
-    return fetch(PUT_ACRONYM_URL + id,
+    return fetch(ACRONYM_URL + id,
         {
             method: "PUT",
             headers: {
@@ -65,7 +65,7 @@ function updateAcronym(definition, id) {
 * return promise
 */
 function deleteAcronym(id) {
-    return fetch(DELETE_ACRONYM_URL + id,
+    return fetch(ACRONYM_URL + id,
         {
             method: "DELETE",
             headers: {
