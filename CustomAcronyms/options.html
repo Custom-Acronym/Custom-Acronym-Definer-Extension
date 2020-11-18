@@ -1,29 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="Constants.js"></script>
-    <script src="thirdparty/jquery-3.5.1.min.js"></script>
-    <script src="thirdparty/bootstrap.min.js"></script>
-    <link href="thirdparty/bootstrap.min.css" rel="stylesheet" />
-    <title>Settings</title>
-  </head>
-  <body>
-    <div class="col-xs-4 col-xs-offset-4">
-      <h1>Settings</h1>
-      <form>
-        <div class="form-group">
-          <label for="sel1">Activation Key:</label>
-          <select class="form-control" id="sel1">
-            <option>Double Click</option>
-            <option>Ctrl + Click</option>
-            <option>Shift + Click</option>
-            <option>Ctrl + Shift + Click</option>
-          </select>
-          <br />
-        </div>
-      </form>
-    </div>
 
-    <script src="options.js"></script>
-  </body>
+<head>
+  <script src="Constants.js"></script>
+  <script src="thirdparty/jquery-3.5.1.min.js"></script>
+  <script src="thirdparty/bootstrap.min.js"></script>
+  <link href="thirdparty/bootstrap.min.css" rel="stylesheet" />
+  <title>Settings</title>
+</head>
+
+<body>
+  <div class="col-xs-4 col-xs-offset-4">
+    <h1>Settings</h1>
+    <form>
+      <div class="form-group">
+        <label for="sel1">Activation Key:</label>
+        <select class="form-control" id="sel1">
+          <option>Double Click</option>
+          <option>Ctrl + Click</option>
+          <option>Shift + Click</option>
+          <option>Ctrl + Shift + Click</option>
+        </select>
+        <br />
+      </div>
+    </form>
+    <b>History:</b> <br>
+    <label style="font-weight: 100">
+      <input type="checkbox" id="track"> Track History
+    </label> <br>
+    <button type="button" id="download">Download History</button>
+    <button type="button" id="clear">Clear History</button>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+
 </html>

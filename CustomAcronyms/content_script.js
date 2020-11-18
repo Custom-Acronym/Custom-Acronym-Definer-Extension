@@ -22,13 +22,13 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
     document.body.appendChild(div);
 }
 
- /**
-  * Get the coordinates to display the popup only within the display
-  * Coordinates are calculated from the top left of the popup box
-  * @param {*} clickLocation - location of click event
-  * @param {*} boxDim - dimension of the box
-  * @param {*} windowSize - size of the page 
-  */
+/**
+ * Get the coordinates to display the popup only within the display
+ * Coordinates are calculated from the top left of the popup box
+ * @param {*} clickLocation - location of click event
+ * @param {*} boxDim - dimension of the box
+ * @param {*} windowSize - size of the page 
+ */
 function getCoordinate(clickLocation, boxDim, windowSize) {
     let offset = boxDim / 2;
     let coord = clickLocation - offset;
@@ -65,9 +65,9 @@ function getHighlightedText() {
 /**
  * Get the higlighted acronym, create a popup bubble, bind the click event to exit the bubble.
  */
-function handleDisplayAcronym(event){
+function handleDisplayAcronym(event) {
     let acronym = getHighlightedText();
-    if(!acronym){
+    if (!acronym) {
         return;
     }
 
@@ -98,6 +98,21 @@ document.body.addEventListener('dblclick', handleDisplayAcronym);
 document.body.addEventListener('click', closeDialog);
 
 /**
+ * Adds the acronym-definition pair to the user's local history.
+ * @param {string} acronym 
+ * @param {string} definition 
+ */
+function track(acronym, definition) {
+    chrome.storage.local.get('history', function (result) {
+        let history = result.history || [];
+        history.push({ acronym: acronym, definition: definition, time: Date() });
+        chrome.storage.local.set({ history: history }, function () {
+            console.log('saved pair to storage', acronym, definition);
+        });
+    });
+}
+
+/**
  * Send message to background script to perform get request.
  * Cannot do the get request within the page due to the same origin policy.
  */
@@ -107,8 +122,14 @@ chrome.runtime.onMessage.addListener(
             return;
         }
         definition = request.definition;
+        let acronym = request.acronym.toUpperCase();
         let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
         let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
         meaning.innerText = definition;
+        chrome.storage.local.get('track', function (result) {
+            if (result.track !== false) {
+                track(acronym, definition);
+            }
+        });
     }
 )

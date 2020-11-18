@@ -11,14 +11,16 @@ chrome.commands.onCommand.addListener(function (command) {
  * Send definition received to the popup bubble tab 
  */
 function sendDefinition(data, tabid) {
+  let acronym = data.acronym;
+  let result = data.result;
   let definition = "";
-  if (!data) {
+  if (!result) {
     definition = "Acronym not defined"
   }
   else {
-    definition = data[0].definition
+    definition = result[0].definition
   }
-  chrome.tabs.sendMessage(tabid, { definition: definition });
+  chrome.tabs.sendMessage(tabid, { acronym: acronym, definition: definition });
 }
 
 // Listen for a message from the 'More' button
@@ -27,9 +29,9 @@ chrome.runtime.onMessage.addListener(
     if (request.acronym) {
       getAcronym(request.acronym)
         .then(response => response.json())
-        .then(data => sendDefinition(data, sender.tab.id))
+        .then(data => sendDefinition({ acronym: request.acronym, result: data }, sender.tab.id))
         .catch((error) => {
-          sendDefinition(null, sender.tab.id)
+          sendDefinition({ acronym: request.acronym, result: null }, sender.tab.id)
         })
     }
     else if (request.button) {
