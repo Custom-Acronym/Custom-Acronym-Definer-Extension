@@ -2,15 +2,15 @@
 
 /**
  * Listen for key combinations, TODO: Handle these
- *  */ 
+ *  */
 chrome.commands.onCommand.addListener(function (command) {
   console.log('Command:', command);
 });
 
 /**
- * Send defition recieved to the popup bubble tab 
+ * Send definition received to the popup bubble tab 
  */
-function sendDefition(data, tabid) {
+function sendDefinition(data, tabid) {
   let definition = "";
   if (!data) {
     definition = "Acronym not defined"
@@ -26,11 +26,11 @@ chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.acronym) {
       getAcronym(request.acronym)
-      .then(response => response.json())
-      .then(data => sendDefition(data, sender.tab.id))
-      .catch((error) => {
-        sendDefition(null, sender.tab.id)
-      })
+        .then(response => response.json())
+        .then(data => sendDefinition(data, sender.tab.id))
+        .catch((error) => {
+          sendDefinition(null, sender.tab.id)
+        })
     }
     else if (request.button) {
       chrome.windows.create({
