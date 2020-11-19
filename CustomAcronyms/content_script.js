@@ -2,6 +2,7 @@ const Style = '<style> #gdx-bubble-main,#gdx-arrow-container{background-color:#f
 const boxWidth = 300;
 const boxHeight = 230;
 var definition = "&zwnj;"; // Blank character so the box renders the same size
+var acronym = "";
 var data = {};
 var currentIndex = 0;
 
@@ -57,8 +58,8 @@ function getCoordinate(clickLocation, boxDim, windowSize) {
 /**
  * Handle more button click
  */
-function moreClicked() {
-    chrome.runtime.sendMessage({ button: "more" });
+function moreClicked(buttonAcronym) {
+    chrome.runtime.sendMessage({ "button": "more", "buttonAcronym": acronym });
 }
 
 /**
@@ -102,8 +103,9 @@ function getHighlightedText() {
 function handleDisplayAcronym(event) {
     closeDialog();
     currentIndex = 0;
-    let acronym = getHighlightedText();
+    acronym = getHighlightedText();
     if (!acronym) {
+        acronym = "";
         return;
     }
     acronym = acronym.toUpperCase();
@@ -173,7 +175,7 @@ chrome.runtime.onMessage.addListener(
         }
         else {
             definition = data[currentIndex].definition;
-            let acronym = data.acronym;
+            let acronym = data[currentIndex].acronym;
             chrome.storage.local.get('track', function (result) {
                 if (result.track !== false) {
                     track(acronym, definition);
@@ -191,6 +193,8 @@ chrome.runtime.onMessage.addListener(
             backButton.style.display = 'inline';
             backButton.disabled = true;
             nextButton.style.display = 'inline';
+            nextButton.disabled = false;
+
         }
     }
 )
@@ -201,6 +205,8 @@ function setButtonState() {
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     let nextButton = shadowDOM.querySelector("#gdx-bubble-next");
     let backButton = shadowDOM.querySelector("#gdx-bubble-back");
+    nextButton.disabled = false;
+    backButton.disabled = false;
     if (currentIndex <= 0) {
         nextButton.disabled = false;
         backButton.disabled = true;

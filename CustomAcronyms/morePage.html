@@ -21,8 +21,29 @@
             placeholder=""
           />
         </div>
-        <button type="submit" class="btn btn-primary">GET ACRONYM</button>
+        <button type="submit" class="btn btn-primary" style="display: block">GET ACRONYM</button>
+        <br>
+        <button id="backButton" style="display: none" class="btn btn-primary">
+          PREVIOUS
+        </button>
+        <button id="nextButton" style="display: none" class="btn btn-primary">
+          NEXT
+        </button>
       </form>
+
+      <h1>Update Acronym</h1>
+      <div class="form-group" id="updateArea">
+        <textarea
+          class="md-textarea form-control"
+          id="updateTextArea"
+          rows="2"
+          disabled="true"
+        ></textarea>
+        <br />
+        <button id="updateButton" disabled="true" class="btn btn-primary">
+          UPDATE ACRONYM
+        </button>
+      </div>
 
       <h1>Add New Acronym</h1>
       <form id="addAcronym">

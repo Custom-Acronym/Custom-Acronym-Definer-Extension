@@ -22,8 +22,10 @@ chrome.runtime.onMessage.addListener(
       chrome.windows.create({
         url: chrome.runtime.getURL('morePage.html'),
         type: 'popup',
-        height: 710,
+        height: 750,
         width: 470
+      }, function (window) {
+        chrome.tabs.sendMessage(window.id, { "buttonAcronym": request.buttonAcronym })
       })
     }
   });
