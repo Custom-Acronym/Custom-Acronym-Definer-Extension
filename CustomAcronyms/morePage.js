@@ -1,5 +1,3 @@
-// window.addEventListener("load", function () {
-
   /**
    * Handle submission of the text area 
    */
@@ -95,5 +93,4 @@
         })
     });
   }
-// });
 

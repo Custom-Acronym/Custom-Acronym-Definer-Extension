@@ -2,6 +2,7 @@ const Style = '<style> #gdx-bubble-main,#gdx-arrow-container{background-color:#f
 const boxWidth = 300;
 const boxHeight = 230;
 var definition = "&zwnj;"; // Blank character so the box renders the same size
+var data = {};
 
 /**
  * Create the popup bubble on the user's page
@@ -17,6 +18,8 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
         '<div id="gdx-bubble-query">' + acronym +
         '</div></div><div id="gdx-bubble-meaning">' + definition + '</div>' +
+        '<button id="gdx-bubble-back" class="">«</button>' + 
+        '<button id="gdx-bubble-next" class="">»</button>' +
         '<button id="gdx-bubble-more" class="">More »</button></div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
@@ -70,8 +73,9 @@ function handleDisplayAcronym(event) {
     if (!acronym) {
         return;
     }
+    acronym = acronym.toUpperCase();
 
-    chrome.runtime.sendMessage({ acronym: acronym });
+    chrome.runtime.sendMessage({ acronym: acronym});
 
     createPopupBubble(event, boxWidth, acronym, definition);
 
@@ -117,19 +121,26 @@ function track(acronym, definition) {
  * Cannot do the get request within the page due to the same origin policy.
  */
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        if (!request.definition) {
-            return;
+    function (response, sender, sendResponse) {
+        data = response;
+        console.log(data);
+        if (data.length == 0) {
+          definition = 'Acronym not defined';
         }
-        definition = request.definition;
-        let acronym = request.acronym.toUpperCase();
-        let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
-        let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
-        meaning.innerText = definition;
-        chrome.storage.local.get('track', function (result) {
+        else {
+          definition = data[0].definition;
+          let acronym = data.acronym;
+          chrome.storage.local.get('track', function (result) {
             if (result.track !== false) {
                 track(acronym, definition);
             }
         });
+        }
+
+        let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+        let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
+        meaning.innerText = definition;
+
+
     }
 )
