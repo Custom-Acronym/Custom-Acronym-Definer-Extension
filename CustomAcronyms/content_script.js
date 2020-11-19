@@ -7,11 +7,11 @@ var currentIndex = 0;
 
 // Bind click events to all the div tags on the page
 var divs = document.body.childNodes;
-for(var i = 0; i < divs.length; i++){
+for (var i = 0; i < divs.length; i++) {
     //do something to each div like
     divs[i].addEventListener('click', closeDialog);
     divs[i].addEventListener('dblclick', handleDisplayAcronym);
- }
+}
 
 /**
  * Create the popup bubble on the user's page
@@ -28,9 +28,9 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
         '<div id="gdx-bubble-query">' + acronym +
         '</div></div><div id="gdx-bubble-meaning">' + definition + '</div>' +
-        '<button id="gdx-bubble-back">«</button>' +
-        '<button id="gdx-bubble-next">»</button>' +
-        '<button id="gdx-bubble-more">More »</button></div>';
+        '<button id="gdx-bubble-back" style="display: none;">«</button>' +
+        '<button id="gdx-bubble-next" style="display: none;">»</button>' +
+        '<button id="gdx-bubble-more" style="display: block;">More »</button></div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
 }
@@ -69,7 +69,7 @@ function backClicked() {
         return;
     }
     currentIndex--;
-    setDefinition();
+    setDefinitionPopup();
 }
 
 /**
@@ -80,7 +80,7 @@ function nextClicked() {
         return;
     }
     currentIndex++;
-    setDefinition();
+    setDefinitionPopup();
 }
 
 /** 
@@ -184,12 +184,40 @@ chrome.runtime.onMessage.addListener(
         let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
         let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
         meaning.innerText = definition;
+
+        if (data.length > 1) {
+            let nextButton = shadowDOM.querySelector("#gdx-bubble-next");
+            let backButton = shadowDOM.querySelector("#gdx-bubble-back");
+            backButton.style.display = 'inline';
+            backButton.disabled = true;
+            nextButton.style.display = 'inline';
+        }
     }
 )
+/**
+ * Set next and back button state
+ */
+function setButtonState() {
+    let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+    let nextButton = shadowDOM.querySelector("#gdx-bubble-next");
+    let backButton = shadowDOM.querySelector("#gdx-bubble-back");
+    if (currentIndex <= 0) {
+        nextButton.disabled = false;
+        backButton.disabled = true;
+    }
+    if (currentIndex >= data.length - 1) {
+        nextButton.disabled = true;
+        backButton.disabled = false;
+    }
+}
 
-function setDefinition(){
+/**
+ * Update the definition popup
+ */
+function setDefinitionPopup() {
     let definition = data[currentIndex].definition;
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
     meaning.innerText = definition;
+    setButtonState();
 }
