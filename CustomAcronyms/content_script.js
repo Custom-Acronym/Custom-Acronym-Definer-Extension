@@ -31,6 +31,7 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
         '</div></div><div id="gdx-bubble-meaning">' + definition + '</div>' +
         '<button id="gdx-bubble-back" style="display: none;">«</button>' +
         '<button id="gdx-bubble-next" style="display: none;">»</button>' +
+        '<button id="gdx-bubble-report" style="float: right;">Report</button>' +
         '<button id="gdx-bubble-more" style="display: block;">More »</button></div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
@@ -84,6 +85,13 @@ function nextClicked() {
     setDefinitionPopup();
 }
 
+/**
+ * Handle next button click
+ */
+function reportClicked() {
+    //TODO: send message for reporting
+}
+
 /** 
  * Get the text that is highlighted
 */
@@ -120,6 +128,7 @@ function handleDisplayAcronym(event) {
     bindButton("#gdx-bubble-next", nextClicked, shadowDOM);
     bindButton("#gdx-bubble-back", backClicked, shadowDOM);
     bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
+    bindButton("#gdx-bubble-report", reportClicked, shadowDOM);
 
 }
 /**
@@ -194,7 +203,6 @@ chrome.runtime.onMessage.addListener(
             backButton.disabled = true;
             nextButton.style.display = 'inline';
             nextButton.disabled = false;
-
         }
     }
 )

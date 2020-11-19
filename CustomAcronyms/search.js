@@ -15,7 +15,7 @@ function displayDefintion(data) {
   let p = document.getElementById('definitionText');
   p.innerText = "";
   for(var i = 0; i < data.length; i++){
-    p.innerText += i+1 + ". " + data[i].definition + '\n'
+    p.innerText += (i+1) + ". " + data[i].definition + '\n'
   }
 }
 
