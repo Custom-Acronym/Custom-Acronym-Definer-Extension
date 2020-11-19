@@ -3,6 +3,15 @@ const boxWidth = 300;
 const boxHeight = 230;
 var definition = "&zwnj;"; // Blank character so the box renders the same size
 var data = {};
+var currentIndex = 0;
+
+// Bind click events to all the div tags on the page
+var divs = document.body.childNodes;
+for(var i = 0; i < divs.length; i++){
+    //do something to each div like
+    divs[i].addEventListener('click', closeDialog);
+    divs[i].addEventListener('dblclick', handleDisplayAcronym);
+ }
 
 /**
  * Create the popup bubble on the user's page
@@ -14,13 +23,14 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
     div.setAttribute('id', 'gdx-bubble-host');
     let shadow = div.attachShadow({ mode: 'open' });
     let html = Style;
-    html += '<div id="gdx-bubble-main" style="left:' + getCoordinate(event.pageX, boxWidth, document.body.clientWidth) + 'px; top: ' + getCoordinate(event.pageY, boxHeight, document.body.scrollHeight) + 'px;">' +
+    html += '<div id="gdx-bubble-main" style="left:' + getCoordinate(event.pageX, boxWidth, document.body.clientWidth) +
+        'px; top: ' + getCoordinate(event.pageY, boxHeight, document.body.scrollHeight) + 'px;">' +
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
         '<div id="gdx-bubble-query">' + acronym +
         '</div></div><div id="gdx-bubble-meaning">' + definition + '</div>' +
-        '<button id="gdx-bubble-back" class="">«</button>' + 
-        '<button id="gdx-bubble-next" class="">»</button>' +
-        '<button id="gdx-bubble-more" class="">More »</button></div>';
+        '<button id="gdx-bubble-back">«</button>' +
+        '<button id="gdx-bubble-next">»</button>' +
+        '<button id="gdx-bubble-more">More »</button></div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
 }
@@ -51,6 +61,27 @@ function moreClicked() {
     chrome.runtime.sendMessage({ button: "more" });
 }
 
+/**
+ * Handle back button click
+ */
+function backClicked() {
+    if (currentIndex <= 0) {
+        return;
+    }
+    currentIndex--;
+    setDefinition();
+}
+
+/**
+ * Handle next button click
+ */
+function nextClicked() {
+    if (currentIndex >= data.length - 1) {
+        return;
+    }
+    currentIndex++;
+    setDefinition();
+}
 
 /** 
  * Get the text that is highlighted
@@ -69,21 +100,37 @@ function getHighlightedText() {
  * Get the higlighted acronym, create a popup bubble, bind the click event to exit the bubble.
  */
 function handleDisplayAcronym(event) {
+    closeDialog();
+    currentIndex = 0;
     let acronym = getHighlightedText();
     if (!acronym) {
         return;
     }
     acronym = acronym.toUpperCase();
 
-    chrome.runtime.sendMessage({ acronym: acronym});
+    chrome.runtime.sendMessage({ acronym: acronym });
 
     createPopupBubble(event, boxWidth, acronym, definition);
 
     //Bind the click event to the more button
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
-    let button = shadowDOM.querySelector("button");
+    bindButton("#gdx-bubble-more", moreClicked, shadowDOM);
+    bindButton("#gdx-bubble-next", nextClicked, shadowDOM);
+    bindButton("#gdx-bubble-back", backClicked, shadowDOM);
+    bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
+
+}
+/**
+ * Bind button click listeners
+ * 
+ * @param {*} className - name of html class
+ * @param {*} clickActionCallback - callback function 
+ * @param {*} element
+ */
+function bindButton(className, clickActionCallback, element) {
+    let button = element.querySelector(className);
     if (button) {
-        button.addEventListener('click', moreClicked);
+        button.addEventListener('click', clickActionCallback);
     }
 }
 
@@ -97,9 +144,6 @@ function closeDialog() {
     }
     definition = "&zwnj;"; // Blank character so the box renders the same size
 }
-
-document.body.addEventListener('dblclick', handleDisplayAcronym);
-document.body.addEventListener('click', closeDialog);
 
 /**
  * Adds the acronym-definition pair to the user's local history.
@@ -125,22 +169,27 @@ chrome.runtime.onMessage.addListener(
         data = response;
         console.log(data);
         if (data.length == 0) {
-          definition = 'Acronym not defined';
+            definition = 'Acronym not defined';
         }
         else {
-          definition = data[0].definition;
-          let acronym = data.acronym;
-          chrome.storage.local.get('track', function (result) {
-            if (result.track !== false) {
-                track(acronym, definition);
-            }
-        });
+            definition = data[currentIndex].definition;
+            let acronym = data.acronym;
+            chrome.storage.local.get('track', function (result) {
+                if (result.track !== false) {
+                    track(acronym, definition);
+                }
+            });
         }
 
         let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
         let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
         meaning.innerText = definition;
-
-
     }
 )
+
+function setDefinition(){
+    let definition = data[currentIndex].definition;
+    let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+    let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
+    meaning.innerText = definition;
+}
