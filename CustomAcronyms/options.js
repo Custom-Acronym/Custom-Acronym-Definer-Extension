@@ -44,7 +44,7 @@ track.addEventListener('click', () => {
 
 document.getElementById('submit').addEventListener('click', () => {
     let entries = JSON.parse(document.getElementById('entries').value);
-    fetch('http://localhost:3000/api/acronym', {
+    fetch(ACRONYM_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ document.getElementById('submitFile').addEventListener('click', () => {
     let file = document.getElementById('file').files[0];
     const formData = new FormData();
     formData.append('file', file);
-    fetch('http://localhost:3000/api/acronym', {
+    fetch(ACRONYM_URL, {
         method: 'POST',
         body: formData
     })
