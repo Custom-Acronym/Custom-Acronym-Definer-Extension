@@ -159,14 +159,14 @@ function closeDialog() {
 /**
  * Adds the acronym-definition pair to the user's local history.
  * @param {string} acronym 
- * @param {string} definition 
+ * @param {[string]} definitions 
  */
-function track(acronym, definition) {
+function track(acronym, definitions) {
     chrome.storage.local.get('history', function (result) {
         let history = result.history || [];
-        history.push({ acronym: acronym, definition: definition, time: Date() });
+        history.push({ acronym: acronym, definitions: definitions, time: Date() });
         chrome.storage.local.set({ history: history }, function () {
-            console.log('saved pair to storage', acronym, definition);
+            console.log('saved pair to storage', acronym, definitions);
         });
     });
 }
@@ -187,7 +187,8 @@ chrome.runtime.onMessage.addListener(
             let acronym = data[currentIndex].acronym;
             chrome.storage.local.get('track', function (result) {
                 if (result.track !== false) {
-                    track(acronym, definition);
+                    let definitions = data.map(entry => entry.definition);
+                    track(acronym, definitions);
                 }
             });
         }
