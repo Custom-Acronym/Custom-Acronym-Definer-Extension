@@ -109,28 +109,46 @@ function getHighlightedText() {
  * Get the higlighted acronym, create a popup bubble, bind the click event to exit the bubble.
  */
 function handleDisplayAcronym(event) {
-    closeDialog();
-    currentIndex = 0;
-    acronym = getHighlightedText();
-    if (!acronym) {
-        acronym = "";
-        return;
-    }
-    acronym = acronym.toUpperCase();
+    chrome.storage.local.get('trigger', function (result) {
+        let trigger = result.trigger || 'dbl';
+        let ctrl = event.ctrlKey;
+        let shift = event.shiftKey;
+        let alt = event.altKey;
+        if (trigger == 'ctrl' && !ctrl) {
+            return;
+        }
+        else if (trigger == 'shift' && !shift) {
+            return;
+        }
+        else if (trigger == 'alt' && !alt) {
+            return;
+        }
+        else if (trigger == 'ctrlshift' && (!ctrl || !shift)) {
+            return;
+        }
+        closeDialog();
+        currentIndex = 0;
+        acronym = getHighlightedText();
+        if (!acronym) {
+            acronym = "";
+            return;
+        }
+        acronym = acronym.toUpperCase();
 
-    chrome.runtime.sendMessage({ acronym: acronym });
+        chrome.runtime.sendMessage({ acronym: acronym });
 
-    createPopupBubble(event, boxWidth, acronym, definition);
+        createPopupBubble(event, boxWidth, acronym, definition);
 
-    //Bind the click event to the more button
-    let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
-    bindButton("#gdx-bubble-more", moreClicked, shadowDOM);
-    bindButton("#gdx-bubble-next", nextClicked, shadowDOM);
-    bindButton("#gdx-bubble-back", backClicked, shadowDOM);
-    bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
-    bindButton("#gdx-bubble-report", reportClicked, shadowDOM);
-
+        //Bind the click event to the more button
+        let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+        bindButton("#gdx-bubble-more", moreClicked, shadowDOM);
+        bindButton("#gdx-bubble-next", nextClicked, shadowDOM);
+        bindButton("#gdx-bubble-back", backClicked, shadowDOM);
+        bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
+        bindButton("#gdx-bubble-report", reportClicked, shadowDOM);
+    });
 }
+
 /**
  * Bind button click listeners
  * 

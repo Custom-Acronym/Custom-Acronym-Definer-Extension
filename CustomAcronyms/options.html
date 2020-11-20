@@ -14,27 +14,31 @@
     <h1>Settings</h1>
     <form>
       <div class="form-group">
-        <label for="sel1">Activation Key:</label>
-        <select class="form-control" id="sel1">
-          <option>Double Click</option>
-          <option>Ctrl + Click</option>
-          <option>Shift + Click</option>
-          <option>Ctrl + Shift + Click</option>
+        <label for="trigger">Activation Key:</label>
+        <select class="form-control" id="trigger">
+          <option value="dbl">Double Click</option>
+          <option value="ctrl">Ctrl + Double Click</option>
+          <option value="shift">Shift + Double Click</option>
+          <option value="alt">Alt + Double Click</option>
+          <option value="ctrlshift">Ctrl + Shift + Double Click</option>
         </select>
         <br />
       </div>
     </form>
     <b>History:</b> <br>
-    <label style="font-weight: 100">
-      <input type="checkbox" id="track"> Track History
-    </label> <br>
-    <button type="button" id="download">Download History</button>
-    <button type="button" id="clear">Clear History</button>
+    <label style="font-weight: 100; width: 50%">
+      <input class="form-control" type="checkbox" id="track" style="width: 10%; height: 25px; display: inline">
+      Track History
+    </label>
+    <br>
+    <button class="form-control" type="button" id="download">Download History</button>
+    <button class="form-control" type="button" id="clear">Clear History</button>
     <br><br> <b>Insert entries:</b> <br>
-    <textarea id="entries" placeholder="Input entries here as JSON..." rows="10" cols="25"></textarea>
-    <br> <button type="button" id="submit">Upload</button> <br>
-    <br> <input type="file" accept=".json" id="file">
-    <button type="button" id="submitFile">Upload file</button> <br>
+    <textarea class="form-control" id="entries" placeholder="Input entries here as JSON..." rows="10"
+      cols="25"></textarea>
+    <br> <button class="form-control" type="button" id="submit">Upload</button> <br>
+    <br> <input class="form-control" type="file" accept=".json" id="file">
+    <button class="form-control" type="button" id="submitFile">Upload file</button> <br>
 
   </div>
 

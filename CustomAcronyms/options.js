@@ -16,6 +16,22 @@ function downloadObjectAsJson(exportObj, exportName) {
     downloadAnchorNode.remove();
 }
 
+let trigger = document.getElementById('trigger');
+
+// set initial value for trigger
+chrome.storage.local.get('trigger', function (result) {
+    if (result.trigger != undefined) {
+        trigger.value = result.trigger;
+    }
+});
+
+// set trigger on change
+trigger.addEventListener('change', () => {
+    let triggerVal = trigger.value;
+    chrome.storage.local.set({ trigger: triggerVal });
+});
+
+// download history as json file
 document.getElementById('download').addEventListener('click', () => {
     chrome.storage.local.get(null, function (result) {
         let history = result.history || 'History is empty';
@@ -23,6 +39,7 @@ document.getElementById('download').addEventListener('click', () => {
     });
 });
 
+// clear history
 document.getElementById('clear').addEventListener('click', () => {
     chrome.storage.local.clear(function () {
         alert('Cleared history')
@@ -31,17 +48,20 @@ document.getElementById('clear').addEventListener('click', () => {
 
 let track = document.getElementById('track');
 
+// set initial value for tracking history
 chrome.storage.local.get('track', function (result) {
     if (result.track !== false) {
         track.checked = true;
     }
 });
 
+// set tracking on change
 track.addEventListener('click', () => {
     let shouldTrack = track.checked;
     chrome.storage.local.set({ track: shouldTrack });
 });
 
+// send entries to server
 document.getElementById('submit').addEventListener('click', () => {
     let entries = JSON.parse(document.getElementById('entries').value);
     fetch(ACRONYM_URL, {
@@ -56,6 +76,7 @@ document.getElementById('submit').addEventListener('click', () => {
         .catch(err => alert('invalid data'));
 });
 
+// send file to server
 document.getElementById('submitFile').addEventListener('click', () => {
     let file = document.getElementById('file').files[0];
     const formData = new FormData();
