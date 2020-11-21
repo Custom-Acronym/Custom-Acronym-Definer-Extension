@@ -63,7 +63,13 @@ track.addEventListener('click', () => {
 
 // send entries to server
 document.getElementById('submit').addEventListener('click', () => {
-    let entries = JSON.parse(document.getElementById('entries').value);
+    try {
+        var entries = JSON.parse(document.getElementById('entries').value);
+    } catch {
+        alert('invalid data');
+        return;
+    }
+
     fetch(ACRONYM_URL, {
         method: 'POST',
         headers: {
