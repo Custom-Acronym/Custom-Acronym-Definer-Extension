@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener(
           chrome.tabs.sendMessage(sender.tab.id, data)
         })
     }
-    else if (request.button) {
+    else if (request.button == "more") {
       chrome.windows.create({
         url: chrome.runtime.getURL('morePage.html'),
         type: 'popup',
@@ -27,5 +27,11 @@ chrome.runtime.onMessage.addListener(
       }, function (window) {
         chrome.tabs.sendMessage(window.id, { "buttonAcronym": request.buttonAcronym })
       })
+    }
+    else if (request.button == "report") {
+      console.log('report')
+    }
+    else if (request.button == "like") {
+      console.log('like')
     }
   });

@@ -9,7 +9,6 @@ var currentIndex = 0;
 // Bind click events to all the div tags on the page
 var divs = document.body.childNodes;
 for (var i = 0; i < divs.length; i++) {
-    //do something to each div like
     divs[i].addEventListener('click', closeDialog);
     divs[i].addEventListener('dblclick', handleDisplayAcronym);
 }
@@ -27,12 +26,18 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
     html += '<div id="gdx-bubble-main" style="left:' + getCoordinate(event.pageX, boxWidth, document.body.clientWidth) +
         'px; top: ' + getCoordinate(event.pageY, boxHeight, document.body.scrollHeight) + 'px;">' +
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
-        '<div id="gdx-bubble-query">' + acronym +
-        '</div></div><div id="gdx-bubble-meaning">' + definition + '</div>' +
+        '<div id="gdx-bubble-query">' + acronym + '</div>' + 
+        '<div id="gdx-bubble-points" style="float: right; margin-right:8px; margin-left:5px; font-weight: bold;"></div>' +
+        '<button id="gdx-bubble-like" style="float: right;">Like</button>' +
+        '</div>' +
+        '<div id="gdx-bubble-meaning">' + definition + '</div>' +
         '<button id="gdx-bubble-back" style="display: none;">«</button>' +
         '<button id="gdx-bubble-next" style="display: none;">»</button>' +
         '<button id="gdx-bubble-report" style="float: right;">Report</button>' +
-        '<button id="gdx-bubble-more" style="display: block;">More »</button></div>';
+        '<button id="gdx-bubble-more" style="display: block;">More »</button>' +
+
+
+        '</div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
 }
@@ -60,7 +65,7 @@ function getCoordinate(clickLocation, boxDim, windowSize) {
  * Handle more button click
  */
 function moreClicked(buttonAcronym) {
-    chrome.runtime.sendMessage({ "button": "more", "buttonAcronym": acronym });
+    chrome.runtime.sendMessage({ "button": "more", "buttonAcronym": buttonAcronym });
 }
 
 /**
@@ -90,6 +95,15 @@ function nextClicked() {
  */
 function reportClicked() {
     //TODO: send message for reporting
+    chrome.runtime.sendMessage({ "button": "report"});
+}
+
+/**
+ * Handle next button click
+ */
+function likeClicked() {
+    //TODO: send message for reporting
+    chrome.runtime.sendMessage({ "button": "like"});
 }
 
 /** 
@@ -106,24 +120,35 @@ function getHighlightedText() {
 }
 
 /**
+ * Check the keys that pressed in the event
+ * @param {} event - double click event
+ */
+function checkKeys(event, result) {
+    let trigger = result.trigger || 'dbl';
+    let ctrl = event.ctrlKey;
+    let shift = event.shiftKey;
+    let alt = event.altKey;
+    if (trigger == 'ctrl' && !ctrl) {
+        return false;
+    }
+    else if (trigger == 'shift' && !shift) {
+        return false;
+    }
+    else if (trigger == 'alt' && !alt) {
+        return false;
+    }
+    else if (trigger == 'ctrlshift' && (!ctrl || !shift)) {
+        return false;
+    }
+    return true
+}
+
+/**
  * Get the higlighted acronym, create a popup bubble, bind the click event to exit the bubble.
  */
 function handleDisplayAcronym(event) {
     chrome.storage.local.get('trigger', function (result) {
-        let trigger = result.trigger || 'dbl';
-        let ctrl = event.ctrlKey;
-        let shift = event.shiftKey;
-        let alt = event.altKey;
-        if (trigger == 'ctrl' && !ctrl) {
-            return;
-        }
-        else if (trigger == 'shift' && !shift) {
-            return;
-        }
-        else if (trigger == 'alt' && !alt) {
-            return;
-        }
-        else if (trigger == 'ctrlshift' && (!ctrl || !shift)) {
+        if (!checkKeys(event, result)) {
             return;
         }
         closeDialog();
@@ -146,6 +171,7 @@ function handleDisplayAcronym(event) {
         bindButton("#gdx-bubble-back", backClicked, shadowDOM);
         bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
         bindButton("#gdx-bubble-report", reportClicked, shadowDOM);
+        bindButton("#gdx-bubble-like", likeClicked, shadowDOM);
     });
 }
 
@@ -211,17 +237,10 @@ chrome.runtime.onMessage.addListener(
             });
         }
 
-        let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
-        let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
-        meaning.innerText = definition;
+        setDefinitionPopup();
 
         if (data.length > 1) {
-            let nextButton = shadowDOM.querySelector("#gdx-bubble-next");
-            let backButton = shadowDOM.querySelector("#gdx-bubble-back");
-            backButton.style.display = 'inline';
-            backButton.disabled = true;
-            nextButton.style.display = 'inline';
-            nextButton.disabled = false;
+            setButtonState();
         }
     }
 )
@@ -232,6 +251,8 @@ function setButtonState() {
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     let nextButton = shadowDOM.querySelector("#gdx-bubble-next");
     let backButton = shadowDOM.querySelector("#gdx-bubble-back");
+    backButton.style.display = 'inline';
+    nextButton.style.display = 'inline';
     nextButton.disabled = false;
     backButton.disabled = false;
     if (currentIndex <= 0) {
@@ -252,5 +273,7 @@ function setDefinitionPopup() {
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
     meaning.innerText = definition;
+    let points = shadowDOM.querySelector('#gdx-bubble-points');
+    points.innerText = data[currentIndex].points;
     setButtonState();
 }
