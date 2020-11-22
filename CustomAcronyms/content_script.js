@@ -27,8 +27,8 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
         'px; top: ' + getCoordinate(event.pageY, boxHeight, document.body.scrollHeight) + 'px;">' +
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
         '<div id="gdx-bubble-query">' + acronym + '</div>' + 
-        '<div id="gdx-bubble-points" style="float: right; margin-right:8px; margin-left:5px; font-weight: bold;"></div>' +
-        '<button id="gdx-bubble-like" style="float: right;">Like</button>' +
+        '<div id="gdx-bubble-points" style="float: right; margin-right:8px; font-weight: bold;"></div>' +
+        '<button id="gdx-bubble-like" style="float: right; margin-right:5px;">Like</button>' +
         '</div>' +
         '<div id="gdx-bubble-meaning">' + definition + '</div>' +
         '<button id="gdx-bubble-back" style="display: none;">«</button>' +
