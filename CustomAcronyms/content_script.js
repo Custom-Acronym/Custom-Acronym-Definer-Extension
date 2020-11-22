@@ -28,12 +28,12 @@ function createPopupBubble(event, acronym, definition) {
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
         '<div id="gdx-bubble-query">' + acronym + '</div>' +
         '<div id="gdx-bubble-points" style="float: right; margin-right:8px; font-weight: bold;"></div>' +
-        '<button id="gdx-bubble-like" style="float: right; margin-right:5px;">Like</button>' +
+        '<button id="gdx-bubble-like" style="float: right; margin-right:5px; display:none;">Like</button>' +
         '</div>' +
         '<div id="gdx-bubble-meaning">' + definition + '</div>' +
         '<button id="gdx-bubble-back" style="display: none;">«</button>' +
         '<button id="gdx-bubble-next" style="display: none;">»</button>' +
-        '<button id="gdx-bubble-report" style="float: right;">Report</button>' +
+        '<button id="gdx-bubble-report" style="float: right; display:none;">Report</button>' +
         '<button id="gdx-bubble-more" style="display: block;">More »</button>' +
         '</div>';
     shadow.innerHTML = html;
@@ -219,10 +219,21 @@ chrome.runtime.onMessage.addListener(
     function (response, sender, sendResponse) {
         data = response;
         console.log(data);
+        // Remove reported acronyms
+        for (let i = data.length - 1; i >= 0; i--) {
+            if (data[i].reports >= 2) {
+                data.splice(i, 1);
+            }
+        }
+
         if (data.length == 0) {
             data = [{ definition: 'Acronym not defined', points: "" }]
         }
         else {
+            // Display the one with the most votes first
+            data.sort(function (a, b) {
+                return a.points > b.points;
+            })
             definition = data[currentIndex].definition;
             let acronym = data[currentIndex].acronym;
             chrome.storage.local.get('track', function (result) {
@@ -263,16 +274,23 @@ function setButtonState() {
 function setDefinitionPopup() {
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
-    // Remove reported acronyms
-    for (let i = data.length - 1; i >= 0; i--) {
-        if (data[i].reports >= 2) {
-            data.splice(i, 1);
+    let defintion = data[currentIndex].definition;
+    meaning.innerText = defintion
+    let like = shadowDOM.querySelector('#gdx-bubble-like');
+    let report = shadowDOM.querySelector('#gdx-bubble-report');
+
+    if (defintion != "Acronym not defined") {
+        report.style.display = 'inline';
+        like.style.display = 'inline';
+        let points = shadowDOM.querySelector('#gdx-bubble-points');
+        points.innerText = data[currentIndex].points;
+        if (data.length > 1) {
+            setButtonState();
         }
     }
-    meaning.innerText = data[currentIndex].definition;
-    let points = shadowDOM.querySelector('#gdx-bubble-points');
-    points.innerText = data[currentIndex].points;
-    if (data.length > 1) {
-        setButtonState();
+    else {
+        report.style.display = 'none';
+        like.style.display = 'none';
     }
+
 }

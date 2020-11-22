@@ -80,13 +80,13 @@ function reportAcronym(id) {
 
 
 /**
- * Report the acronym to the database
+ * Increase the score of the acronym in the database
  * @param {*} id - mongodb id 
  */
 function likeAcronym(id) {
-    let vote = [{
-        vote: '-1'
-    }]
+    let vote = {
+        "vote": '1'
+    }
     return fetch(VOTE_URL + id,
         {
             method: "PATCH",
