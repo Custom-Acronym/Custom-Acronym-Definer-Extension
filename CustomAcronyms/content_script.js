@@ -16,7 +16,7 @@ for (var i = 0; i < divs.length; i++) {
 /**
  * Create the popup bubble on the user's page
  */
-function createPopupBubble(event, boxWidth, acronym, definition) {
+function createPopupBubble(event, acronym, definition) {
     let div = document.createElement('div');
 
     // Add popup box html to the user's current page
@@ -26,7 +26,7 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
     html += '<div id="gdx-bubble-main" style="left:' + getCoordinate(event.pageX, boxWidth, document.body.clientWidth) +
         'px; top: ' + getCoordinate(event.pageY, boxHeight, document.body.scrollHeight) + 'px;">' +
         '<div id="gdx-bubble-close"></div><div id="gdx-bubble-query-row" class="">' +
-        '<div id="gdx-bubble-query">' + acronym + '</div>' + 
+        '<div id="gdx-bubble-query">' + acronym + '</div>' +
         '<div id="gdx-bubble-points" style="float: right; margin-right:8px; font-weight: bold;"></div>' +
         '<button id="gdx-bubble-like" style="float: right; margin-right:5px;">Like</button>' +
         '</div>' +
@@ -35,8 +35,6 @@ function createPopupBubble(event, boxWidth, acronym, definition) {
         '<button id="gdx-bubble-next" style="display: none;">»</button>' +
         '<button id="gdx-bubble-report" style="float: right;">Report</button>' +
         '<button id="gdx-bubble-more" style="display: block;">More »</button>' +
-
-
         '</div>';
     shadow.innerHTML = html;
     document.body.appendChild(div);
@@ -94,16 +92,14 @@ function nextClicked() {
  * Handle next button click
  */
 function reportClicked() {
-    //TODO: send message for reporting
-    chrome.runtime.sendMessage({ "button": "report"});
+    chrome.runtime.sendMessage({ "button": "report", "id": data[currentIndex]._id });
 }
 
 /**
  * Handle next button click
  */
 function likeClicked() {
-    //TODO: send message for reporting
-    chrome.runtime.sendMessage({ "button": "like"});
+    chrome.runtime.sendMessage({ "button": "like", "id": data[currentIndex]._id });
 }
 
 /** 
@@ -162,7 +158,7 @@ function handleDisplayAcronym(event) {
 
         chrome.runtime.sendMessage({ acronym: acronym });
 
-        createPopupBubble(event, boxWidth, acronym, definition);
+        createPopupBubble(event, acronym, definition);
 
         //Bind the click event to the more button
         let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
@@ -224,7 +220,7 @@ chrome.runtime.onMessage.addListener(
         data = response;
         console.log(data);
         if (data.length == 0) {
-            definition = 'Acronym not defined';
+            data = [{ definition: 'Acronym not defined', points: "" }]
         }
         else {
             definition = data[currentIndex].definition;
@@ -238,10 +234,6 @@ chrome.runtime.onMessage.addListener(
         }
 
         setDefinitionPopup();
-
-        if (data.length > 1) {
-            setButtonState();
-        }
     }
 )
 /**
@@ -269,11 +261,18 @@ function setButtonState() {
  * Update the definition popup
  */
 function setDefinitionPopup() {
-    let definition = data[currentIndex].definition;
     let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
     let meaning = shadowDOM.querySelector('#gdx-bubble-meaning');
-    meaning.innerText = definition;
+    // Remove reported acronyms
+    for (let i = data.length - 1; i >= 0; i--) {
+        if (data[i].reports >= 2) {
+            data.splice(i, 1);
+        }
+    }
+    meaning.innerText = data[currentIndex].definition;
     let points = shadowDOM.querySelector('#gdx-bubble-points');
     points.innerText = data[currentIndex].points;
-    setButtonState();
+    if (data.length > 1) {
+        setButtonState();
+    }
 }
