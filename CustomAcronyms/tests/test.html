@@ -13,6 +13,23 @@
     <script>
       // Mock the chrome instance
       var chrome = getChromeInstance();
+      function createBubble(assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+        return bubble;
+      }
+
+      function closePopup(assert) {
+        document.getElementById("testDiv").click();
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      }
     </script>
 
     <script src="../background.js"></script>
@@ -29,14 +46,7 @@
 
     <script>
       QUnit.test("Test opening and closing popup", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
+        bubble = createBubble(assert);
 
         handleDefinitionResponse(data);
 
@@ -45,22 +55,13 @@
         let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
         assert.equal(definition, meaning.innerText);
 
-        document.getElementById("testDiv").click();
-        bubble = document.getElementById("gdx-bubble-host");
-        assert.equal(bubble, null);
+        closePopup(assert);
       });
     </script>
 
     <script>
       QUnit.test("Test acronym query in popup", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
+        bubble = createBubble(assert);
 
         handleDefinitionResponse(data);
 
@@ -68,23 +69,13 @@
         let shadowDOM = bubble.shadowRoot;
         let query = shadowDOM.querySelector("#gdx-bubble-query");
         assert.equal(query.innerText, "UIUC");
-
-        document.getElementById("testDiv").click();
-        bubble = document.getElementById("gdx-bubble-host");
-        assert.equal(bubble, null);
+        closePopup(assert);
       });
     </script>
 
     <script>
       QUnit.test("Test opening and clicking more", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
+        bubble = createBubble(assert);
 
         let shadowDOM = bubble.shadowRoot;
         let more = shadowDOM.querySelector("#gdx-bubble-more");
@@ -92,22 +83,13 @@
         more.click(); // click more page
         assert.notEqual(bubble, null);
 
-        document.getElementById("testDiv").click();
-        bubble = document.getElementById("gdx-bubble-host");
-        assert.equal(bubble, null);
+        closePopup(assert);
       });
     </script>
 
     <script>
       QUnit.test("Test opening and clicking report", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
+        bubble = createBubble(assert);
 
         let shadowDOM = bubble.shadowRoot;
         let report = shadowDOM.querySelector("#gdx-bubble-report");
@@ -115,22 +97,13 @@
         report.click(); // click report
         assert.notEqual(bubble, null);
 
-        document.getElementById("testDiv").click();
-        bubble = document.getElementById("gdx-bubble-host");
-        assert.equal(bubble, null);
+        closePopup(assert);
       });
     </script>
 
     <script>
       QUnit.test("Test opening and clicking like", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
+        bubble = createBubble(assert);
 
         let shadowDOM = bubble.shadowRoot;
         let like = shadowDOM.querySelector("#gdx-bubble-like");
@@ -138,22 +111,13 @@
         like.click(); // click like
         assert.notEqual(bubble, null);
 
-        document.getElementById("testDiv").click();
-        bubble = document.getElementById("gdx-bubble-host");
-        assert.equal(bubble, null);
+        closePopup(assert);
       });
     </script>
 
     <script>
       QUnit.test("Test opening and clicking close", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
+        bubble = createBubble(assert);
 
         let shadowDOM = bubble.shadowRoot;
         let close = shadowDOM.querySelector("#gdx-bubble-close");
@@ -166,15 +130,7 @@
 
     <script>
       QUnit.test("Test opening and next Button", function (assert) {
-        var event = new MouseEvent("dblclick", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        });
-        document.getElementById("testDiv").dispatchEvent(event);
-        let bubble = document.getElementById("gdx-bubble-host");
-        assert.notEqual(bubble, null);
-
+        bubble = createBubble(assert);
         handleDefinitionResponse(data);
 
         // Check that the definition gets set
@@ -190,9 +146,7 @@
         prev.click();
         assert.equal(definition, meaning.innerText);
 
-        document.getElementById("testDiv").click();
-        bubble = document.getElementById("gdx-bubble-host");
-        assert.equal(bubble, null);;
+        closePopup(assert);
       });
     </script>
 
