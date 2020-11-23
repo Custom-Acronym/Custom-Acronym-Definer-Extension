@@ -148,7 +148,67 @@
         assert.equal(definition, meaning.innerText);
         prev.click();
         assert.equal(definition, meaning.innerText);
-        
+
+        closePopup(assert);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and previous Button", function (assert) {
+        bubble = createBubble(assert);
+        handleDefinitionResponse(data);
+
+        // Check that the definition gets set
+        let shadowDOM = bubble.shadowRoot;
+        let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
+        assert.equal(definition, meaning.innerText);
+        let prev = shadowDOM.querySelector("#gdx-bubble-back");
+        prev.click();
+        assert.equal(definition, meaning.innerText);
+        prev.click();
+        assert.equal(definition, meaning.innerText);
+        let next = shadowDOM.querySelector("#gdx-bubble-next");
+        next.click();
+        assert.equal(definition + "2", meaning.innerText);
+
+        closePopup(assert);
+      });
+    </script>
+    <script>
+      QUnit.test("Test opening points changing", function (assert) {
+        bubble = createBubble(assert);
+
+        handleDefinitionResponse(data);
+
+        let shadowDOM = bubble.shadowRoot;
+        let like = shadowDOM.querySelector("#gdx-bubble-like");
+        let points = shadowDOM.querySelector("#gdx-bubble-points");
+        let initial = points.innerText;
+
+        like.click(); // click like
+        assert.notEqual(bubble, null);
+        points = shadowDOM.querySelector("#gdx-bubble-points");
+        assert.equal(points.innerText, (parseInt(initial)+1).toString());
+        like.click();
+        points = shadowDOM.querySelector("#gdx-bubble-points");
+        assert.equal(points.innerText, (parseInt(initial)+2).toString());
+
+        closePopup(assert);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test report removes definition", function (assert) {
+        bubble = createBubble(assert);
+        let shadowDOM = bubble.shadowRoot;
+        let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
+
+        // Report it twice
+        handleDefinitionResponse(reportData);
+        meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
+
+        assert.equal(meaning.innerText, originalDefinition + "2");
+
         closePopup(assert);
       });
     </script>
@@ -271,9 +331,16 @@
       }
       // Mock definition
       var definition = "University of Illinois at Urbana-Champaign";
+      var originalDefinition = "University of Illinois at Urbana-Champaign";
+
       var data = [
         { _id: "1", definition: definition, points: 1 },
         { _id: "1", definition: definition + "2", points: 0 },
+      ];
+
+      var reportData = [
+        { _id: "1", definition: definition, points: 1, reports:2},
+        { _id: "1", definition: definition + "2", points: 0, reports:0},
       ];
     </script>
   </body>
