@@ -140,12 +140,15 @@
         let next = shadowDOM.querySelector("#gdx-bubble-next");
         next.click();
         assert.equal(definition + "2", meaning.innerText);
+        // Definition doesn't change
         next.click();
         assert.equal(definition + "2", meaning.innerText);
         let prev = shadowDOM.querySelector("#gdx-bubble-back");
         prev.click();
         assert.equal(definition, meaning.innerText);
-
+        prev.click();
+        assert.equal(definition, meaning.innerText);
+        
         closePopup(assert);
       });
     </script>

@@ -51,7 +51,8 @@ if(nextButton){
       return;
     }
     currentIndex++;
-    setMoreButtonState();
+    setUpdateAreaDefinition();
+
   })
 }
 
@@ -62,7 +63,8 @@ if(backButton){
       return;
     }
     currentIndex--;
-    setMoreButtonState();
+    setUpdateAreaDefinition();
+
   })
 }
 
@@ -80,9 +82,6 @@ if (addAcronymForm) {
 }
 
 if (getAcronymFormNewWindow) {
-  const getAcronymInput = document.getElementById("getAcronymInput");
-  getAcronymInput.innerText = acronym;
-  getAcronymInput.value = acronym;
   getAcronymFormNewWindow.addEventListener("submit", function (event) {
     event.preventDefault();
     let input = document.getElementById("getAcronymInput");
