@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(
     }
     else if (request.button == "more") {
       chrome.windows.create({
-        url: chrome.runtime.getURL('morePage.html'),
+        url: chrome.runtime.getURL('more/morePage.html'),
         type: 'popup',
         height: 750,
         width: 470
