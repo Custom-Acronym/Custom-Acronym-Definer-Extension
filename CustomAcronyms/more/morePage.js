@@ -12,12 +12,6 @@ chrome.runtime.onMessage.addListener(function (request) {
 });
 
 /**
-  * Handle submission of the text area 
-  */
-function handleUpdateSubmission(id) {
-
-}
-/**
  *  Display get the acronym
  */
 function handleGetAcronym(data) {
@@ -33,10 +27,10 @@ function handleGetAcronym(data) {
     document.getElementById("backButton").style.display = 'none';
     return;
   }
-  setDefinition();
+  setUpdateAreaDefinition();
 
   if (data.length > 1) {
-    setButtonState();
+    setMoreButtonState();
   }
   else {
     backButton.style.display = 'none';
@@ -50,25 +44,27 @@ const getAcronymFormNewWindow = document.getElementById("getAcronymNewWindow");
 const updateButton = document.getElementById("updateButton");
 const nextButton = document.getElementById("nextButton");
 const backButton = document.getElementById("backButton");
+if(nextButton){
+  nextButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (currentIndex >= data.length - 1) {
+      return;
+    }
+    currentIndex++;
+    setMoreButtonState();
+  })
+}
 
-nextButton.addEventListener('click', function (event) {
-  event.preventDefault();
-  if (currentIndex >= data.length - 1) {
-    return;
-  }
-  currentIndex++;
-  setDefinition();
-})
-
-backButton.addEventListener('click', function (event) {
-  event.preventDefault();
-  if (currentIndex <= 0) {
-    return;
-  }
-  currentIndex--;
-  setDefinition();
-})
-
+if(backButton){
+  backButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (currentIndex <= 0) {
+      return;
+    }
+    currentIndex--;
+    setMoreButtonState();
+  })
+}
 
 if (addAcronymForm) {
   addAcronymForm.addEventListener("submit", function (event) {
@@ -114,11 +110,10 @@ if (updateButton) {
   });
 }
 
-
 /**
  * Set next and back button state
  */
-function setButtonState() {
+function setMoreButtonState() {
   let nextButton = document.getElementById("nextButton");
   let backButton = document.getElementById("backButton");
   nextButton.style.display = 'inline';
@@ -138,11 +133,11 @@ function setButtonState() {
 /**
 * Update the definition popup
 */
-function setDefinition() {
+function setUpdateAreaDefinition() {
   let definition = data[currentIndex].definition;
   document.getElementById("updateTextArea").value = definition;
   document.getElementById("updateTextArea").innerText = definition;
   document.getElementById("updateButton").disabled = false;
   document.getElementById("updateTextArea").disabled = false;
-  setButtonState();
+  setMoreButtonState();
 }

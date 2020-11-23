@@ -6,11 +6,11 @@ var acronym = "";
 var data = {};
 var currentIndex = 0;
 
-// Bind click events to all the div tags on the page
-var divs = document.body.childNodes;
-for (var i = 0; i < divs.length; i++) {
-    divs[i].addEventListener('click', closeDialog);
-    divs[i].addEventListener('dblclick', handleDisplayAcronym);
+// Bind click events to all tags on the page
+var tags = document.body.childNodes;
+for (var i = 0; i < tags.length; i++) {
+    tags[i].addEventListener('click', closeDialog);
+    tags[i].addEventListener('dblclick', handleDisplayAcronym);
 }
 
 /**
