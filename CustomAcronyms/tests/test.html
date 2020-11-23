@@ -16,13 +16,13 @@
     </script>
 
     <script src="../background.js"></script>
-    <script src="../morePage.js"></script>
+    <script src="../more/morePage.js"></script>
 
     <script>
       QUnit.test("Test display search definition", function (assert) {
         displayDefintion([{ definition: "Test" }]);
         p = document.getElementById("definitionText");
-        assert.equal(p.innerText, "Test");
+        assert.equal(p.innerText, "1. Test\n");
         document.getElementById("getAcronym").remove();
         p.remove();
       });
@@ -185,8 +185,9 @@
       <button type="submit" class="btn btn-primary">GET ACRONYM</button>
     </form>
     <form id="getAcronymNewWindow"></form>
+    <p id="definitionText"></p>
 
-    <script src="../search.js"></script>
+    <script src="../search/search.js"></script>
     <script src="../content_script.js"></script>
     <script>
       // Mock function
