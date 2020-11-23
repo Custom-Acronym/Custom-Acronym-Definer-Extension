@@ -34,61 +34,166 @@
           bubbles: true,
           cancelable: true,
         });
-        document.body.dispatchEvent(event);
+        document.getElementById("testDiv").dispatchEvent(event);
         let bubble = document.getElementById("gdx-bubble-host");
         assert.notEqual(bubble, null);
+
+        handleDefinitionResponse(data);
 
         // Check that the definition gets set
         let shadowDOM = bubble.shadowRoot;
         let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
-        assert.equal(meaning.innerText, definition);
+        assert.equal(definition, meaning.innerText);
 
-        document.body.click(); // close bubble
+        document.getElementById("testDiv").click();
         bubble = document.getElementById("gdx-bubble-host");
         assert.equal(bubble, null);
       });
     </script>
 
     <script>
-      // QUnit.test("Test acronym query in popup", function (assert) {
-      //   var event = new MouseEvent("dblclick", {
-      //     view: window,
-      //     bubbles: true,
-      //     cancelable: true,
-      //   });
-      //   document.body.dispatchEvent(event);
-      //   let bubble = document.getElementById("gdx-bubble-host");
-      //   assert.notEqual(bubble, null);
+      QUnit.test("Test acronym query in popup", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
 
-      //   // Check that the definition gets set
-      //   let shadowDOM = bubble.shadowRoot;
-      //   let query = shadowDOM.querySelector("#gdx-bubble-query");
-      //   assert.equal(query.innerText, "UIUC");
+        handleDefinitionResponse(data);
 
-      //   document.body.click(); // close bubble
-      //   bubble = document.getElementById("gdx-bubble-host");
-      //   assert.equal(bubble, null);
-      // });
+        // Check that the acronym gets set
+        let shadowDOM = bubble.shadowRoot;
+        let query = shadowDOM.querySelector("#gdx-bubble-query");
+        assert.equal(query.innerText, "UIUC");
+
+        document.getElementById("testDiv").click();
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
     </script>
 
     <script>
-      // QUnit.test("Test opening and clicking more", function (assert) {
-      //   var event = new MouseEvent("dblclick", {
-      //     view: window,
-      //     bubbles: true,
-      //     cancelable: true,
-      //   });
-      //   document.body.dispatchEvent(event);
-      //   let bubble = document.getElementById("gdx-bubble-host");
-      //   assert.notEqual(bubble, null);
+      QUnit.test("Test opening and clicking more", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
 
-      //   let shadowDOM = bubble.shadowRoot;
-      //   let more = shadowDOM.querySelector("#gdx-bubble-more");
+        let shadowDOM = bubble.shadowRoot;
+        let more = shadowDOM.querySelector("#gdx-bubble-more");
 
-      //   more.click(); // click more page
-      //   bubble = document.getElementById("gdx-bubble-host");
-      //   assert.equal(bubble, null);
-      // });
+        more.click(); // click more page
+        assert.notEqual(bubble, null);
+
+        document.getElementById("testDiv").click();
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and clicking report", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        let shadowDOM = bubble.shadowRoot;
+        let report = shadowDOM.querySelector("#gdx-bubble-report");
+
+        report.click(); // click report
+        assert.notEqual(bubble, null);
+
+        document.getElementById("testDiv").click();
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and clicking like", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        let shadowDOM = bubble.shadowRoot;
+        let like = shadowDOM.querySelector("#gdx-bubble-like");
+
+        like.click(); // click like
+        assert.notEqual(bubble, null);
+
+        document.getElementById("testDiv").click();
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and clicking close", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        let shadowDOM = bubble.shadowRoot;
+        let close = shadowDOM.querySelector("#gdx-bubble-close");
+
+        close.click(); // click x
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);
+      });
+    </script>
+
+    <script>
+      QUnit.test("Test opening and next Button", function (assert) {
+        var event = new MouseEvent("dblclick", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.getElementById("testDiv").dispatchEvent(event);
+        let bubble = document.getElementById("gdx-bubble-host");
+        assert.notEqual(bubble, null);
+
+        handleDefinitionResponse(data);
+
+        // Check that the definition gets set
+        let shadowDOM = bubble.shadowRoot;
+        let meaning = shadowDOM.querySelector("#gdx-bubble-meaning");
+        assert.equal(definition, meaning.innerText);
+        let next = shadowDOM.querySelector("#gdx-bubble-next");
+        next.click();
+        assert.equal(definition + "2", meaning.innerText);
+        next.click();
+        assert.equal(definition + "2", meaning.innerText);
+        let prev = shadowDOM.querySelector("#gdx-bubble-back");
+        prev.click();
+        assert.equal(definition, meaning.innerText);
+
+        document.getElementById("testDiv").click();
+        bubble = document.getElementById("gdx-bubble-host");
+        assert.equal(bubble, null);;
+      });
     </script>
 
     <script>
@@ -197,7 +302,7 @@
         UPDATE ACRONYM
       </button>
     </div>
-    <div>Test</div>
+    <div id="testDiv"></div>
 
     <script src="../search/search.js"></script>
     <script src="../content_script.js"></script>
@@ -209,6 +314,10 @@
       }
       // Mock definition
       var definition = "University of Illinois at Urbana-Champaign";
+      var data = [
+        { _id: "1", definition: definition, points: 1 },
+        { _id: "1", definition: definition + "2", points: 0 },
+      ];
     </script>
   </body>
 </html>

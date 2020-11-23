@@ -41,6 +41,15 @@ chromeInstance = {
     },
   },
   storage: {
+    local: {
+      // Mock for click events
+      get: (key, returnFunc) => {
+        returnFunc({"trigger":"dbl"})
+      },
+      set: (key, returnFunc) =>{
+
+      }
+    },
     sync: {
       get: (keys, returnFunc) => {
         const returnValue = {};

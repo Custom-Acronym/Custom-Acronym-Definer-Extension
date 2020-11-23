@@ -10,7 +10,11 @@ var currentIndex = 0;
 var tags = document.body.childNodes;
 for (var i = 0; i < tags.length; i++) {
     tags[i].addEventListener('click', closeDialog);
-    tags[i].addEventListener('dblclick', handleDisplayAcronym);
+    tags[i].addEventListener('dblclick', function (event) {
+        chrome.storage.local.get('trigger', function (result) {
+            handleDisplayAcronym(event, result);
+        });
+    });
 }
 
 /**
@@ -144,34 +148,33 @@ function checkKeys(event, result) {
 /**
  * Get the higlighted acronym, create a popup bubble, bind the click event to exit the bubble.
  */
-function handleDisplayAcronym(event) {
-    chrome.storage.local.get('trigger', function (result) {
-        if (!checkKeys(event, result)) {
-            return;
-        }
-        closeDialog();
-        currentIndex = 0;
-        acronym = getHighlightedText();
-        if (!acronym) {
-            acronym = "";
-            return;
-        }
-        acronym = acronym.toUpperCase();
+function handleDisplayAcronym(event, result) {
+    if (!checkKeys(event, result)) {
+        return;
+    }
+    closeDialog();
+    currentIndex = 0;
+    acronym = getHighlightedText();
+    if (!acronym) {
+        acronym = "";
+        return;
+    }
+    acronym = acronym.toUpperCase();
 
-        chrome.runtime.sendMessage({ acronym: acronym });
+    chrome.runtime.sendMessage({ acronym: acronym });
 
-        createPopupBubble(event, acronym, definition);
+    createPopupBubble(event, acronym, definition);
 
-        //Bind the click event to the more button
-        let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
-        bindButton("#gdx-bubble-more", moreClicked, shadowDOM);
-        bindButton("#gdx-bubble-next", nextClicked, shadowDOM);
-        bindButton("#gdx-bubble-back", backClicked, shadowDOM);
-        bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
-        bindButton("#gdx-bubble-report", reportClicked, shadowDOM);
-        bindButton("#gdx-bubble-like", likeClicked, shadowDOM);
-    });
+    //Bind the click event to the more button
+    let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+    bindButton("#gdx-bubble-more", moreClicked, shadowDOM);
+    bindButton("#gdx-bubble-next", nextClicked, shadowDOM);
+    bindButton("#gdx-bubble-back", backClicked, shadowDOM);
+    bindButton("#gdx-bubble-close", closeDialog, shadowDOM);
+    bindButton("#gdx-bubble-report", reportClicked, shadowDOM);
+    bindButton("#gdx-bubble-like", likeClicked, shadowDOM);
 }
+
 
 /**
  * Bind button click listeners
@@ -213,12 +216,15 @@ function track(acronym, definitions) {
     });
 }
 
+
+chrome.runtime.onMessage.addListener(handleDefinitionResponse);
+
 /**
  * Send message to background script to perform get request.
  * Cannot do the get request within the page due to the same origin policy.
  */
-chrome.runtime.onMessage.addListener(
-    function (response, sender, sendResponse) {
+function handleDefinitionResponse(response, sender, sendResponse) {
+    {
         data = response;
         console.log(data);
         // Remove reported acronyms
@@ -247,10 +253,9 @@ chrome.runtime.onMessage.addListener(
         }
 
         setDefinitionPopup();
-
     }
+}
 
-)
 /**
  * Set next and back button state
  */
