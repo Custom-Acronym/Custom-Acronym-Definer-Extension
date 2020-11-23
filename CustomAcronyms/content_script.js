@@ -100,6 +100,8 @@ function reportClicked() {
  */
 function likeClicked() {
     chrome.runtime.sendMessage({ "button": "like", "id": data[currentIndex]._id });
+    data[currentIndex].points += 1
+    setPoints();
 }
 
 /** 
@@ -245,7 +247,9 @@ chrome.runtime.onMessage.addListener(
         }
 
         setDefinitionPopup();
+
     }
+
 )
 /**
  * Set next and back button state
@@ -282,8 +286,7 @@ function setDefinitionPopup() {
     if (defintion != "Acronym not defined") {
         report.style.display = 'inline';
         like.style.display = 'inline';
-        let points = shadowDOM.querySelector('#gdx-bubble-points');
-        points.innerText = data[currentIndex].points;
+        setPoints();
         if (data.length > 1) {
             setButtonState();
         }
@@ -293,4 +296,13 @@ function setDefinitionPopup() {
         like.style.display = 'none';
     }
 
+}
+
+/**
+ * Set the points in the popup menu
+ */
+function setPoints() {
+    let shadowDOM = document.getElementById('gdx-bubble-host').shadowRoot;
+    let points = shadowDOM.querySelector('#gdx-bubble-points');
+    points.innerText = data[currentIndex].points;
 }

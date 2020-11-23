@@ -24,17 +24,17 @@ chrome.runtime.onMessage.addListener(
     else if (request.button == "report") {
       console.log('report')
       reportAcronym(request.id)
-      .then(response => console.log(response))
-      .catch((error) => {
-        console.log(error);
-      })
+        .then(response => console.log(response))
+        .catch((error) => {
+          console.log(error);
+        })
     }
     else if (request.button == "like") {
       console.log('like')
       likeAcronym(request.id)
-      .then(response => console.log(response))
-      .catch((error) => {
-        console.log(error);
-      })
+        .then(response => console.log(response))
+        .catch((error) => {
+          console.log(error);
+        })
     }
   });
