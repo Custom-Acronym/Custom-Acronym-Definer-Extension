@@ -83,3 +83,40 @@ Please refer to the readme
 - You should be navigated to an Options page
 
 ![](Images/2020-11-11-20-02-24.png)
+
+## Viewing Multiple Definitions
+
+- Double click on an acronym that has two definitions in the database.
+
+- You should see two arrows at the bottom
+
+- One should be disabled. Click the >> button
+
+![](Images/2020-11-23-00-30-16.png)
+
+- Verify that the definitions switches
+
+- Verify that the next button cannot be pressed
+
+![](Images/2020-11-23-00-30-33.png)
+
+## Report Acronym
+
+- Double click on an acronym that is in the database to bring up the popup
+
+- Click the report button twice
+
+![](Images/2020-11-23-00-32-39.png)
+
+- This acronym should no longer show up in the list since it has been reported twice. 
+
+
+## Like Acronym
+
+- Double click on an acronym that is in the database to bring up the popup
+
+- Click the like button
+
+![](Images/2020-11-23-00-30-55.png)
+
+- Verify that the like count goes up

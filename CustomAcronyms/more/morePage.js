@@ -12,44 +12,6 @@ chrome.runtime.onMessage.addListener(function (request) {
 });
 
 /**
-  * Handle submission of the text area 
-  */
-function handleUpdateSubmission(id) {
-
-}
-
-// /**
-//  * Build Text area to display definition and allow the user edit and send an update request,
-//  * @param {*} definition - definition of the acronym
-//  * @param {*} id - database id
-//  */
-// function buildUpdateTextArea(definition, id) {
-//   let getForm = document.getElementById('getAcronymNewWindow');
-//   let div = document.createElement('div');
-//   let textarea = document.createElement('textarea');
-//   let updateButton = document.createElement('button');
-//   let h1 = document.createElement('h1');
-//   let linebreak = document.createElement("br");
-
-//   div.classList = "form-group";
-//   div.id = "updateArea";
-//   h1.innerText = "Update Acronym";
-//   div.appendChild(h1);
-//   div.appendChild(textarea);
-//   div.appendChild(linebreak);
-//   textarea.classList = 'md-textarea form-control';
-//   textarea.id = 'updateTextArea';
-//   textarea.rows = '4';
-//   textarea.innerText = definition;
-//   updateButton.id = 'updateButton';
-//   updateButton.innerText = "UPDATE ACRONYM";
-//   updateButton.classList = "btn btn-primary";
-
-//   div.appendChild(updateButton);
-//   getForm.parentNode.insertBefore(div, getForm.nextSibling);
-// }
-
-/**
  *  Display get the acronym
  */
 function handleGetAcronym(data) {
@@ -65,26 +27,15 @@ function handleGetAcronym(data) {
     document.getElementById("backButton").style.display = 'none';
     return;
   }
-  let definition = data[currentIndex].definition;
-
-  document.getElementById("updateTextArea").value = definition;
-  document.getElementById("updateTextArea").innerText = definition;
-  document.getElementById("updateButton").disabled = false;
-  document.getElementById("updateTextArea").disabled = false;
-
+  setUpdateAreaDefinition();
 
   if (data.length > 1) {
-    let nextButton = document.getElementById("nextButton");
-    let backButton = document.getElementById("backButton");
-    backButton.style.display = 'inline';
-    backButton.disabled = true;
-    nextButton.style.display = 'inline';
-    nextButton.disabled = false;
-}
-else{
-  backButton.style.display = 'none';
-  nextButton.style.display = 'none';
-}
+    setMoreButtonState();
+  }
+  else {
+    backButton.style.display = 'none';
+    nextButton.style.display = 'none';
+  }
 
 }
 
@@ -93,24 +44,29 @@ const getAcronymFormNewWindow = document.getElementById("getAcronymNewWindow");
 const updateButton = document.getElementById("updateButton");
 const nextButton = document.getElementById("nextButton");
 const backButton = document.getElementById("backButton");
+if(nextButton){
+  nextButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (currentIndex >= data.length - 1) {
+      return;
+    }
+    currentIndex++;
+    setUpdateAreaDefinition();
 
-nextButton.addEventListener('click', function(event){
-  event.preventDefault();
-  if(currentIndex >= data.length - 1){ 
-    return;
-  }
-  currentIndex++;
-  setDefinition();
-})
-backButton.addEventListener('click', function(event){
-  event.preventDefault();
-  if(currentIndex <= 0){ 
-    return;
-  }
-  currentIndex--;
-  setDefinition();
-})
+  })
+}
 
+if(backButton){
+  backButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (currentIndex <= 0) {
+      return;
+    }
+    currentIndex--;
+    setUpdateAreaDefinition();
+
+  })
+}
 
 if (addAcronymForm) {
   addAcronymForm.addEventListener("submit", function (event) {
@@ -126,9 +82,6 @@ if (addAcronymForm) {
 }
 
 if (getAcronymFormNewWindow) {
-  // const getAcronymInput = document.getElementById("getAcronymInput");
-  // getAcronymInput.innerText = acronym;
-  // getAcronymInput.value = acronym;
   getAcronymFormNewWindow.addEventListener("submit", function (event) {
     event.preventDefault();
     let input = document.getElementById("getAcronymInput");
@@ -146,7 +99,6 @@ if (getAcronymFormNewWindow) {
 }
 
 if (updateButton) {
-
   updateButton.addEventListener('click', function (event) {
     event.preventDefault()
     updateAcronym(document.getElementById("updateTextArea").value, data[currentIndex]._id)
@@ -157,31 +109,34 @@ if (updateButton) {
   });
 }
 
-
 /**
  * Set next and back button state
  */
-function setButtonState() {
+function setMoreButtonState() {
   let nextButton = document.getElementById("nextButton");
   let backButton = document.getElementById("backButton");
+  nextButton.style.display = 'inline';
+  backButton.style.display = 'inline';
   nextButton.disabled = false;
   backButton.disabled = false;
   if (currentIndex <= 0) {
-      nextButton.disabled = false;
-      backButton.disabled = true;
+    nextButton.disabled = false;
+    backButton.disabled = true;
   }
   if (currentIndex >= data.length - 1) {
-      nextButton.disabled = true;
-      backButton.disabled = false;
+    nextButton.disabled = true;
+    backButton.disabled = false;
   }
 }
 
 /**
 * Update the definition popup
 */
-function setDefinition() {
+function setUpdateAreaDefinition() {
   let definition = data[currentIndex].definition;
   document.getElementById("updateTextArea").value = definition;
   document.getElementById("updateTextArea").innerText = definition;
-  setButtonState();
+  document.getElementById("updateButton").disabled = false;
+  document.getElementById("updateTextArea").disabled = false;
+  setMoreButtonState();
 }
