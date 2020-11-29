@@ -8,22 +8,15 @@ const getAcronymForm = document.getElementById("getAcronym");
 
 function displayDefintion(data) {
   console.log(data);
-  if (!data) {
+  if (data.length == 0) {
     alert("Acronym not found!");
     return;
   }
-  let definition = data[0].definition;
-  let p = document.getElementById('definitionText')
-  if (!p) {
-    let p = document.createElement('p');
-    p.id = "definitionText";
-    p.innerText = definition;
-    document.body.appendChild(p);
+  let p = document.getElementById('definitionText');
+  p.innerText = "";
+  for(var i = 0; i < data.length; i++){
+    p.innerText += (i+1) + ". " + data[i].definition + '\n'
   }
-  else {
-    p.innerText = definition;
-  }
-
 }
 
 getAcronymForm.addEventListener("submit", function (event) {

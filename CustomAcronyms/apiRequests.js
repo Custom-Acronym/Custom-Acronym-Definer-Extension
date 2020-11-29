@@ -9,10 +9,7 @@ function getAcronym(acronym) {
     return fetch(ACRONYM_URL + acronym,
         {
             method: "GET",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: HEADERS,
         });
 }
 
@@ -34,9 +31,7 @@ function addAcronym(acronym, definition) {
     return fetch(ACRONYM_URL,
         {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: HEADERS,
             body: JSON.stringify(acronymPayload)
         });
 }
@@ -53,9 +48,7 @@ function updateAcronym(definition, id) {
     return fetch(ACRONYM_URL + id,
         {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: HEADERS,
             body: JSON.stringify({ "definition": definition })
         });
 }
@@ -63,13 +56,41 @@ function updateAcronym(definition, id) {
 /*
 * Delete acronym to the database 
 * return promise
+* @param {*} id - mongodb id 
 */
 function deleteAcronym(id) {
     return fetch(ACRONYM_URL + id,
         {
             method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: HEADERS
+        });
+}
+
+/**
+ * Report the acronym to the database
+ * @param {*} id - mongodb id 
+ */
+function reportAcronym(id) {
+    return fetch(REPORT_URL + id,
+        {
+            method: "PATCH",
+            headers: HEADERS,
+        });
+}
+
+
+/**
+ * Increase the score of the acronym in the database
+ * @param {*} id - mongodb id 
+ */
+function likeAcronym(id) {
+    let vote = {
+        "vote": '1'
+    }
+    return fetch(VOTE_URL + id,
+        {
+            method: "PATCH",
+            headers: HEADERS,
+            body: JSON.stringify(vote)
         });
 }
